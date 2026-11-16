@@ -1,0 +1,52 @@
+name: mision-lectura
+
+services:
+  mision-lectura:
+    # Opción A: construir desde este repositorio (necesita internet para npm)
+    build: .
+    # Opción B: usar la imagen publicada (comentar "build" y descomentar "image")
+    # image: ghcr.io/loky2202/app-lecturs:latest
+    container_name: mision-lectura
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DATA_DIR=/data
+      - TZ=America/Mexico_City
+    volumes:
+      - mision-lectura-data:/data
+    # Metadatos para que CasaOS muestre la app con nombre e icono
+    x-casaos:
+      title:
+        en_us: Misión Lectura
+      tagline:
+        en_us: Lectura para niños de 6 años
+      description:
+        en_us: Sistema de lecciones y juegos de lectura en español, para red local.
+      category: Education
+      icon: https://raw.githubusercontent.com/Loky2202/app-lecturs/main/client/public/icon.svg
+      port_map: "8080"
+      scheme: http
+      index: /
+
+volumes:
+  mision-lectura-data:
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  main: mision-lectura
+  author: Loky2202
+  category: Education
+  title:
+    en_us: Misión Lectura
+  description:
+    en_us: Lecciones y juegos de lectura en español para niños de 6 años.
+  tagline:
+    en_us: Aprende a leer jugando
+  icon: https://raw.githubusercontent.com/Loky2202/app-lecturs/main/client/public/icon.svg
+  port_map: "8080"
+  scheme: http
+  index: /

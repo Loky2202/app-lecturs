@@ -1,0 +1,20 @@
+/* Grupos de palabras que riman (con emoji de apoyo). */
+export const RHYMES = [
+  [{ w: 'GATO', e: '🐱' }, { w: 'PATO', e: '🦆' }, { w: 'ZAPATO', e: '👟' }],
+  [{ w: 'RANA', e: '🐸' }, { w: 'BANANA', e: '🍌' }, { w: 'MANZANA', e: '🍎' }],
+  [{ w: 'RATÓN', e: '🐭' }, { w: 'MELÓN', e: '🍈' }, { w: 'BALÓN', e: '⚽' }, { w: 'CAMIÓN', e: '🚚' }, { w: 'DRAGÓN', e: '🐉' }, { w: 'AVIÓN', e: '✈️' }],
+  [{ w: 'SOL', e: '☀️' }, { w: 'CARACOL', e: '🐌' }, { w: 'GOL', e: '🥅' }],
+  [{ w: 'MANO', e: '✋' }, { w: 'GUSANO', e: '🐛' }, { w: 'PIANO', e: '🎹' }],
+  [{ w: 'RUEDA', e: '🛞' }, { w: 'MONEDA', e: '🪙' }],
+  [{ w: 'TESORO', e: '💎' }, { w: 'LORO', e: '🦜' }, { w: 'TORO', e: '🐂' }],
+  [{ w: 'ESTRELLA', e: '⭐' }, { w: 'BOTELLA', e: '🍾' }, { w: 'PAELLA', e: '🥘' }],
+  [{ w: 'COHETE', e: '🚀' }, { w: 'JUGUETE', e: '🧸' }],
+  [{ w: 'ROCA', e: '🪨' }, { w: 'FOCA', e: '🦭' }, { w: 'BOCA', e: '👄' }],
+  [{ w: 'CASTILLO', e: '🏰' }, { w: 'ANILLO', e: '💍' }, { w: 'MARTILLO', e: '🔨' }],
+  [{ w: 'PEZ', e: '🐟' }, { w: 'NUEZ', e: '🌰' }],
+  [{ w: 'NIDO', e: '🪺' }, { w: 'VESTIDO', e: '👗' }],
+  [{ w: 'LUNA', e: '🌙' }, { w: 'LAGUNA', e: '🏞️' }],
+  [{ w: 'OSO', e: '🐻' }, { w: 'POZO', e: '🕳️' }, { w: 'GOZO', e: '😄' }],
+  [{ w: 'CASA', e: '🏠' }, { w: 'TAZA', e: '☕' }, { w: 'MASA', e: '🍞' }],
+  [{ w: 'TREN', e: '🚆' }, { w: 'REN', e: '🦌' }, { w: 'BIEN', e: '👍' }],
+];

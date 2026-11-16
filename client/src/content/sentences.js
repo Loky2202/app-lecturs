@@ -1,0 +1,34 @@
+/* Frases cortas con pregunta de comprensión. ans = índice correcto. */
+export const SENTENCES = [
+  { t: 'El dino verde come hojas.', q: '¿Qué come el dino?', o: ['🍃', '🍕', '🍎'], ans: 0, lvl: 4, world: 'dinos' },
+  { t: 'Rex tiene un huevo en el nido.', q: '¿Qué hay en el nido?', o: ['🦴', '🥚', '🪨'], ans: 1, lvl: 4, world: 'dinos' },
+  { t: 'El tren pasa por el volcán.', q: '¿Por dónde pasa el tren?', o: ['🏰', '🌴', '🌋'], ans: 2, lvl: 4, world: 'dinos' },
+  { t: 'El lagarto duerme en la roca.', q: '¿Dónde duerme el lagarto?', o: ['🪨', '🌙', '🚗'], ans: 0, lvl: 4, world: 'dinos' },
+  { t: 'El dino bebé sale del huevo y dice hola.', q: '¿De dónde sale el dino bebé?', o: ['🌋', '🥚', '🌳'], ans: 1, lvl: 5, world: 'dinos' },
+  { t: 'Un meteoro cae y los dinos corren a la cueva.', q: '¿Qué cae del cielo?', o: ['🍎', '☁️', '☄️'], ans: 2, lvl: 5, world: 'dinos' },
+  { t: 'Mi dino favorito tiene tres cuernos y come plantas.', q: '¿Cuántos cuernos tiene?', o: ['3️⃣', '1️⃣', '5️⃣'], ans: 0, lvl: 5, world: 'dinos' },
+
+  { t: 'El carro rojo va rápido.', q: '¿De qué color es el carro?', o: ['🔴', '🔵', '🟢'], ans: 0, lvl: 4, world: 'carros' },
+  { t: 'La moto azul es de Leo.', q: '¿De qué color es la moto?', o: ['🟢', '🔵', '🔴'], ans: 1, lvl: 4, world: 'carros' },
+  { t: 'El camión lleva piedras.', q: '¿Qué lleva el camión?', o: ['🍌', '🐸', '🪨'], ans: 2, lvl: 4, world: 'carros' },
+  { t: 'El cohete vuela a la luna.', q: '¿A dónde vuela el cohete?', o: ['🌙', '🌋', '🏰'], ans: 0, lvl: 4, world: 'carros' },
+  { t: 'El semáforo está en rojo y el taxi se para.', q: '¿Qué hace el taxi?', o: ['🏃', '🛑', '🎵'], ans: 1, lvl: 5, world: 'carros' },
+  { t: 'El tractor amarillo trabaja en el campo con las vacas.', q: '¿Dónde trabaja el tractor?', o: ['🏙️', '🌊', '🌾'], ans: 2, lvl: 5, world: 'carros' },
+  { t: 'El carro de bomberos tiene una escalera muy larga.', q: '¿Qué tiene el carro de bomberos?', o: ['🪜', '🎈', '🍕'], ans: 0, lvl: 5, world: 'carros' },
+
+  { t: 'El robot tiene una llave.', q: '¿Qué tiene el robot?', o: ['🔑', '🎲', '⭐'], ans: 0, lvl: 4, world: 'juegos' },
+  { t: 'Hay un tesoro en el castillo.', q: '¿Qué hay en el castillo?', o: ['🐸', '💎', '🚲'], ans: 1, lvl: 4, world: 'juegos' },
+  { t: 'El mando tiene dos botones.', q: '¿Cuántos botones tiene?', o: ['5️⃣', '3️⃣', '2️⃣'], ans: 2, lvl: 4, world: 'juegos' },
+  { t: 'El marciano llegó en un cohete.', q: '¿En qué llegó el marciano?', o: ['🚀', '🚗', '⛵'], ans: 0, lvl: 4, world: 'juegos' },
+  { t: 'El fantasma se esconde y el mago lo busca con luz.', q: '¿Quién busca al fantasma?', o: ['🤖', '🧙', '👾'], ans: 1, lvl: 5, world: 'juegos' },
+  { t: 'Si tomas la moneda de oro, ganas una vida más.', q: '¿Qué ganas con la moneda?', o: ['🎁', '🗺️', '❤️'], ans: 2, lvl: 5, world: 'juegos' },
+  { t: 'Para pasar el nivel hay que saltar sobre tres bloques.', q: '¿Sobre qué hay que saltar?', o: ['🧱', '🐍', '🌊'], ans: 0, lvl: 5, world: 'juegos' },
+
+  { t: 'La rana salta al agua.', q: '¿A dónde salta la rana?', o: ['💧', '🔥', '🌙'], ans: 0, lvl: 4, world: 'monstruos' },
+  { t: 'El dragón lanza fuego.', q: '¿Qué lanza el dragón?', o: ['💧', '🔥', '⚡'], ans: 1, lvl: 4, world: 'monstruos' },
+  { t: 'El oso come miel.', q: '¿Qué come el oso?', o: ['🍕', '🥚', '🍯'], ans: 2, lvl: 4, world: 'monstruos' },
+  { t: 'El búho vuela de noche.', q: '¿Cuándo vuela el búho?', o: ['🌙', '☀️', '🌧️'], ans: 0, lvl: 4, world: 'monstruos' },
+  { t: 'El pulpo tiene ocho brazos y vive en el mar.', q: '¿Cuántos brazos tiene el pulpo?', o: ['4️⃣', '8️⃣', '2️⃣'], ans: 1, lvl: 5, world: 'monstruos' },
+  { t: 'Chispa es de tipo rayo y gana la carrera.', q: '¿De qué tipo es Chispa?', o: ['💧', '🔥', '⚡'], ans: 2, lvl: 5, world: 'monstruos' },
+  { t: 'Gotita nada en el río y atrapa un pez.', q: '¿Qué atrapa Gotita?', o: ['🐟', '🍎', '🧊'], ans: 0, lvl: 5, world: 'monstruos' },
+];

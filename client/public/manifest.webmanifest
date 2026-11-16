@@ -1,0 +1,15 @@
+{
+  "name": "Misión Lectura",
+  "short_name": "Lectura",
+  "description": "Lecciones y juegos de lectura en español para niños de 6 años.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f7fb",
+  "theme_color": "#2962ff",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
