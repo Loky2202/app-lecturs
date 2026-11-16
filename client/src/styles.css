@@ -310,3 +310,11 @@ input:focus, select:focus { outline: none; border-color: var(--primary); }
   .menu-btn { font-size: 1.05rem; padding: 16px 8px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* Mayúsculas y minúsculas (pantalla de enseñanza) */
+.case-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 560px; }
+.case-item { font-family: inherit; font-size: 1.9rem; font-weight: 700; padding: 12px 6px; border-radius: 16px; border: none; background: #fff; box-shadow: 0 5px 0 #d7deea; cursor: pointer; color: var(--text); display: flex; justify-content: center; gap: 10px; align-items: baseline; }
+.case-item small { font-size: 1.6rem; color: var(--primary); }
+.case-item:active { transform: translateY(3px); box-shadow: 0 2px 0 #d7deea; }
+.case-item.said { background: #fff3cd; }
+.story-page .st.upper { letter-spacing: .08em; font-size: 1.95rem; }

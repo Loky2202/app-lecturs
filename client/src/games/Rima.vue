@@ -20,7 +20,7 @@ const { setInstruction, finish } = useGame(props, emit);
 
 const group = pickOne(RHYMES.filter((g) => g.length >= 2));
 const [target, correct] = shuffle(group).slice(0, 2);
-const ending = (w) => w.slice(-2);
+const ending = (w) => w.normalize('NFD').replace(/[\u0300-\u036f]/g, '').slice(-2);
 const others = RHYMES.filter((g) => g !== group).flat().filter((o) => ending(o.w) !== ending(target.w));
 const dis = shuffle(others).slice(0, 2);
 const choices = shuffle([correct, ...dis]);

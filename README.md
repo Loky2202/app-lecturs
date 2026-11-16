@@ -5,12 +5,22 @@ pensado para un niño al que le cuesta mantener la atención. Se instala en un
 servidor de casa (Docker / CasaOS) y se usa desde la tablet por red local, sin
 internet.
 
-- **Camino de aprendizaje**: 44 lecciones en 6 unidades (vocales, primeras
+- **Camino de aprendizaje**: 50 lecciones en 6 unidades (vocales, primeras
   letras, más letras, palabras, frases y cuentos). Cada lección enseña primero
   (letra, sonido, sílabas y palabras con voz) y después practica con juegos.
-- **14 juegos** de modo libre con 4 mundos: dinosaurios, carros, videojuegos y
+- **Palabras descifrables**: cada lección solo usa palabras que se pueden leer
+  con las letras ya enseñadas (sin dígrafos ni grupos como TR o PL antes de
+  tiempo). La Ñ, la QU y la RR se practican dentro de la palabra.
+- **Mayúsculas y minúsculas**: las letras se aprenden en mayúscula y una
+  lección propia ("Las letras pequeñas") hace el paso a las minúsculas antes
+  de las frases y los cuentos.
+- **15 juegos** de modo libre con 4 mundos: dinosaurios, carros, videojuegos y
   monstruitos coleccionables.
-- **6 cuentos** por páginas con preguntas de comprensión.
+- **8 cuentos** por páginas con preguntas de comprensión: dos en mayúsculas,
+  muy cortos, se abren al terminar las primeras consonantes.
+- **Sonidos grabados (opcional)**: si copias audios de los sonidos de las letras
+  en `client/public/sounds/` (ver el README de esa carpeta) la app los usa en
+  vez de la voz del sistema, que dice "pe" en lugar de "p".
 - **Motivación**: estrellas, álbum de 40 tarjetas, 19 logros, mascota que
   evoluciona, meta diaria y racha de días.
 - **Atención**: una tarea por pantalla, instrucciones en voz alta, misiones

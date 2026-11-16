@@ -10,10 +10,10 @@
 <script setup>
 /* Palabra grande con un hueco opcional (blank = índice, blankLen = letras ocultas). */
 import { computed } from 'vue';
-const props = defineProps({ word: { type: String, required: true }, blank: { type: Number, default: -1 }, blankLen: { type: Number, default: 1 }, highlight: { type: Array, default: () => [] } });
+const props = defineProps({ word: { type: String, required: true }, blank: { type: Number, default: -1 }, blankLen: { type: Number, default: 1 }, highlight: { type: Array, default: () => [] }, lower: { type: Boolean, default: false } });
 const pieces = computed(() => {
   const out = [];
-  const chars = [...props.word];
+  const chars = [...(props.lower ? props.word.toLowerCase() : props.word)];
   for (let i = 0; i < chars.length; i++) {
     if (props.blank >= 0 && i === props.blank) { out.push({ blank: true, len: props.blankLen }); i += props.blankLen - 1; continue; }
     out.push({ ch: chars[i], hl: props.highlight.includes(i) });

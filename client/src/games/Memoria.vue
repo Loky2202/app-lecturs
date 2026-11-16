@@ -2,7 +2,7 @@
   <div class="task">
     <div class="memory" :class="`pairs-${pairs}`">
       <button v-for="(c, i) in cards" :key="i" class="mcard" :class="[c.kind, c.state]" @click="flip(i)">
-        <span class="back">❓</span><span class="face">{{ c.kind === 'word' ? c.w.w : c.w.e }}</span>
+        <span class="back">❓</span><span class="face">{{ c.kind === 'word' ? (p.lower ? c.w.w.toLowerCase() : c.w.w) : c.w.e }}</span>
       </button>
     </div>
   </div>
