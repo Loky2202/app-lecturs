@@ -14,8 +14,9 @@ const props = defineProps({ word: { type: String, required: true }, blank: { typ
 const pieces = computed(() => {
   const out = [];
   const chars = [...(props.lower ? props.word.toLowerCase() : props.word)];
+  const blankLen = Math.max(1, props.blankLen);
   for (let i = 0; i < chars.length; i++) {
-    if (props.blank >= 0 && i === props.blank) { out.push({ blank: true, len: props.blankLen }); i += props.blankLen - 1; continue; }
+    if (props.blank >= 0 && i === props.blank) { out.push({ blank: true, len: blankLen }); i += blankLen - 1; continue; }
     out.push({ ch: chars[i], hl: props.highlight.includes(i) });
   }
   return out;

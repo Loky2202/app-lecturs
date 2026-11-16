@@ -1,7 +1,7 @@
 <template>
   <div class="task">
     <div class="big-emoji">{{ word.e }}</div>
-    <BigWord :word="word.w" :blank="pos" :blank-len="missing.length" />
+    <BigWord :word="word.w" :blank="pos" :blank-len="missing.length || 1" />
     <OptionGrid :options="options" :ok-speak="`${spoken(word.w)}. ¡Muy bien!`" @done="(r) => finish(r.firstTry)" />
   </div>
 </template>
