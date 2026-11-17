@@ -99,16 +99,23 @@
 
       <div class="card">
         <h3>Palabras personalizadas</h3>
-        <p class="small muted">Añade palabras que le gusten (nombres de sus juguetes, su mascota…). Se usan en todos los juegos. Sílabas separadas por guion.</p>
+        <p class="small muted">Añade palabras que le gusten (nombres de sus juguetes, su mascota…). Se usan en todos los juegos. Sílabas separadas por guion. Pon un emoji, sube una foto o las dos cosas (si hay foto, se muestra la foto).</p>
         <div class="word-form">
           <input v-model="nw.word" type="text" placeholder="PALABRA" aria-label="Palabra">
           <input v-model="nw.syllables" type="text" placeholder="PA-LA-BRA" aria-label="Sílabas">
-          <input v-model="nw.emoji" type="text" placeholder="😀" aria-label="Emoji" maxlength="8">
-          <button class="btn primary" @click="addWord">Añadir</button>
+          <input :value="nw.emoji" type="text" placeholder="😀" aria-label="Emoji" @input="nw.emoji = $event.target.value" @change="nw.emoji = $event.target.value">
+          <button class="btn primary" :disabled="addingWord" @click="addWord">Añadir</button>
+        </div>
+        <div class="word-img">
+          <img v-if="nwPreview" :src="nwPreview" alt="Vista previa" class="thumb">
+          <label class="btn ghost">📷 {{ nwImage ? 'Cambiar foto' : 'Subir foto' }}
+            <input type="file" accept="image/*" hidden @change="pickWordImage">
+          </label>
+          <button v-if="nwImage" class="btn ghost" @click="setWordImage(null)">Quitar</button>
         </div>
         <p v-if="wordError" class="error">{{ wordError }}</p>
         <div class="row" style="justify-content: flex-start;">
-          <span v-for="w in app.customWords" :key="w.id" class="badge">{{ w.e }} {{ w.w }} <button class="icon-btn" style="width:28px;height:28px;font-size:.8rem" @click="delWord(w.id)">✖</button></span>
+          <span v-for="w in app.customWords" :key="w.id" class="badge"><Pic :w="w" /> {{ w.w }} <button class="icon-btn" style="width:28px;height:28px;font-size:.8rem" @click="delWord(w)">✖</button></span>
         </div>
       </div>
 
@@ -145,6 +152,9 @@ import { api } from '../api.js';
 import { UNITS, ALL_LESSONS } from '../content/lessons.js';
 import { GAMES } from '../content/misc.js';
 import { Voice } from '../lib/voice.js';
+import Pic from '../components/Pic.vue';
+import { media, saveMedia, removeMedia, shrinkImage } from '../lib/media.js';
+import { WORDS } from '../content/words.js';
 
 const app = useApp();
 const router = useRouter();
@@ -155,6 +165,9 @@ const sel = ref(null);
 const prog = ref(null);
 const stats = ref(null);
 const nw = ref({ word: '', syllables: '', emoji: '' });
+const nwImage = ref(null); // foto ya reducida (Blob) a la espera de crear la palabra
+const nwPreview = ref('');
+const addingWord = ref(false);
 const wordError = ref('');
 const newPin = ref('');
 const pinMsg = ref('');
@@ -235,13 +248,36 @@ async function removeProfile() {
 }
 async function addWord() {
   wordError.value = '';
+  addingWord.value = true;
   try {
-    await api.addWord({ word: nw.value.word, syllables: nw.value.syllables, emoji: nw.value.emoji, world: child.value?.favorite || 'general' });
+    // Con foto el emoji es opcional: el servidor lo exige, así que se pone uno genérico.
+    const emoji = nw.value.emoji.trim() || (nwImage.value ? '🖼️' : '');
+    const created = await api.addWord({ word: nw.value.word, syllables: nw.value.syllables, emoji, world: child.value?.favorite || 'general' });
+    if (nwImage.value) {
+      try { await saveMedia('image', created.w, nwImage.value); } catch (e) { wordError.value = `Palabra añadida, pero la foto no se pudo guardar: ${e.message}`; }
+    }
     nw.value = { word: '', syllables: '', emoji: '' };
+    setWordImage(null);
     await app.reloadCustomWords();
-  } catch (e) { wordError.value = e.message; }
+  } catch (e) { wordError.value = e.message; } finally { addingWord.value = false; }
 }
-async function delWord(id) { await api.deleteWord(id); await app.reloadCustomWords(); }
+async function pickWordImage(ev) {
+  const file = ev.target.files[0];
+  ev.target.value = '';
+  if (!file) return;
+  wordError.value = '';
+  try { setWordImage(await shrinkImage(file)); } catch (e) { wordError.value = e.message; }
+}
+function setWordImage(blob) {
+  if (nwPreview.value) URL.revokeObjectURL(nwPreview.value);
+  nwImage.value = blob;
+  nwPreview.value = blob ? URL.createObjectURL(blob) : '';
+}
+async function delWord(w) {
+  await api.deleteWord(w.id);
+  if (media.image[w.w] && !WORDS.some((x) => x.w === w.w)) await removeMedia('image', w.w).catch(() => {});
+  await app.reloadCustomWords();
+}
 async function changePin() {
   pinMsg.value = '';
   try { await api.setPin(newPin.value); pinOk.value = true; pinMsg.value = 'PIN cambiado.'; newPin.value = ''; } catch (e) { pinOk.value = false; pinMsg.value = e.message; }

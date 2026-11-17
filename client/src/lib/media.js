@@ -39,3 +39,20 @@ export async function removeMedia(kind, key) {
   await api.deleteMedia(kind, key);
   delete media[kind][key];
 }
+
+/* Reduce una foto a 512 px como máximo antes de subirla. */
+export async function shrinkImage(file) {
+  const img = await new Promise((ok, fail) => {
+    const el = new Image();
+    el.onload = () => ok(el);
+    el.onerror = () => fail(new Error('No se pudo leer la imagen.'));
+    el.src = URL.createObjectURL(file);
+  });
+  const scale = Math.min(1, 512 / Math.max(img.naturalWidth, img.naturalHeight));
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(img.naturalWidth * scale));
+  c.height = Math.max(1, Math.round(img.naturalHeight * scale));
+  c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+  URL.revokeObjectURL(img.src);
+  return new Promise((ok) => c.toBlob(ok, 'image/webp', 0.85));
+}

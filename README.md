@@ -5,7 +5,7 @@ pensado para un niño al que le cuesta mantener la atención. Se instala en un
 servidor de casa (Docker / CasaOS) y se usa desde la tablet por red local, sin
 internet.
 
-- **Camino de aprendizaje**: 50 lecciones en 6 unidades (vocales, primeras
+- **Camino de aprendizaje**: 49 lecciones en 6 unidades (vocales, primeras
   letras, más letras, palabras, frases y cuentos). Cada lección enseña primero
   (letra, sonido, sílabas y palabras con voz) y después practica con juegos.
 - **Palabras descifrables**: cada lección solo usa palabras que se pueden leer

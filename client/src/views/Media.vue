@@ -71,7 +71,7 @@ import Pic from '../components/Pic.vue';
 import { api } from '../api.js';
 import { useApp } from '../stores/app.js';
 import { allWords, strip } from '../lib/content.js';
-import { media, loadMedia, saveMedia, saveIcon, removeMedia, audioUrl } from '../lib/media.js';
+import { media, loadMedia, saveMedia, saveIcon, removeMedia, audioUrl, shrinkImage } from '../lib/media.js';
 import { Voice } from '../lib/voice.js';
 import { RHYMES } from '../content/rhymes.js';
 import { LETTER_INFO, SYLLABLES } from '../content/words.js';
@@ -140,26 +140,10 @@ const saveIconDraft = () => run(async () => {
   if (v) await saveIcon(sel.value.w, v); else if (media.icon[sel.value.w]) await removeMedia('icon', sel.value.w);
 });
 
-/* Reduce la imagen a 512 px como máximo antes de subirla. */
-async function shrink(file) {
-  const img = await new Promise((ok, fail) => {
-    const el = new Image();
-    el.onload = () => ok(el);
-    el.onerror = () => fail(new Error('No se pudo leer la imagen.'));
-    el.src = URL.createObjectURL(file);
-  });
-  const scale = Math.min(1, 512 / Math.max(img.naturalWidth, img.naturalHeight));
-  const c = document.createElement('canvas');
-  c.width = Math.max(1, Math.round(img.naturalWidth * scale));
-  c.height = Math.max(1, Math.round(img.naturalHeight * scale));
-  c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-  URL.revokeObjectURL(img.src);
-  return new Promise((ok) => c.toBlob(ok, 'image/webp', 0.85));
-}
 function pickImage(ev) {
   const file = ev.target.files[0];
   ev.target.value = '';
-  if (file) run(async () => saveMedia('image', sel.value.w, await shrink(file)));
+  if (file) run(async () => saveMedia('image', sel.value.w, await shrinkImage(file)));
 }
 function pickAudio(ev) {
   const file = ev.target.files[0];
