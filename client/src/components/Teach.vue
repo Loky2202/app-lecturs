@@ -10,7 +10,7 @@
       </div>
       <div class="word-list">
         <button v-for="w in examples" :key="w.w" class="word-item" @click="sayWord(w)">
-          <span class="we">{{ w.e }}</span><span class="ww">{{ w.w }}</span>
+          <span class="we"><Pic :word="w" /></span><span class="ww">{{ w.w }}</span>
         </button>
       </div>
     </template>
@@ -24,7 +24,7 @@
       </div>
       <div class="word-list">
         <button v-for="w in examples" :key="w.w" class="word-item" @click="sayWord(w)">
-          <span class="we">{{ w.e }}</span><span class="ww">{{ w.w }}</span><span class="ws">{{ w.s.join(' - ') }}</span>
+          <span class="we"><Pic :word="w" /></span><span class="ww">{{ w.w }}</span><span class="ws">{{ w.s.join(' - ') }}</span>
         </button>
       </div>
     </template>
@@ -34,7 +34,7 @@
       <p class="lead center">Toca cada palabra para oírla por sílabas.</p>
       <div class="word-list">
         <button v-for="w in examples" :key="w.w" class="word-item" @click="sayWord(w)">
-          <span class="we">{{ w.e }}</span><span class="ww">{{ w.w }}</span><span class="ws">{{ w.s.join(' - ') }}</span>
+          <span class="we"><Pic :word="w" /></span><span class="ww">{{ w.w }}</span><span class="ws">{{ w.s.join(' - ') }}</span>
         </button>
       </div>
     </template>
@@ -50,6 +50,7 @@
 </template>
 
 <script setup>
+import Pic from './Pic.vue';
 /* Pantallas de enseñanza de una lección. */
 import { computed, reactive, watch } from 'vue';
 import { Voice } from '../lib/voice.js';

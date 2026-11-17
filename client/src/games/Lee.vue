@@ -19,7 +19,7 @@ const { level, world, setInstruction, finish } = useGame(props, emit);
 const p = props.params;
 const maxSyl = p.maxSyl || (level <= 2 ? 2 : level <= 4 ? 3 : 5);
 const word = pickWord({ letter: p.letter, letters: p.letters, minSyl: p.minSyl, maxSyl, world });
-const options = shuffle([word, ...distractors(word, 2, 'e', { world, maxSyl })]).map((c) => ({ label: c.e, kind: 'emoji', correct: c.w === word.w, hint: `Dice ${spoken(word.w)}. Busca ${spoken(word.w)}.` }));
+const options = shuffle([word, ...distractors(word, 2, 'e', { world, maxSyl })]).map((c) => ({ label: c.e, pic: c, kind: 'emoji', correct: c.w === word.w, hint: `Dice ${spoken(word.w)}. Busca ${spoken(word.w)}.` }));
 
 setInstruction('Lee la palabra y toca el dibujo.');
 </script>

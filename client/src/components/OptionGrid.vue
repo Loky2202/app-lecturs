@@ -6,7 +6,7 @@
       :disabled="locked || state[i] === 'bad'"
       @click="choose(i)"
     >
-      <small v-if="o.sub">{{ o.sub }}</small>{{ o.label }}
+      <small v-if="o.sub">{{ o.sub }}</small><Pic v-if="o.pic" :word="o.pic" /><template v-else>{{ o.label }}</template>
     </button>
   </div>
 </template>
@@ -14,6 +14,7 @@
 <script setup>
 /* Cuadrícula de opciones con acierto/error/pista. Emite done({ firstTry }). */
 import { ref, reactive } from 'vue';
+import Pic from './Pic.vue';
 import { Sfx } from '../lib/sfx.js';
 import { Voice } from '../lib/voice.js';
 import { showFeedback, praise, retry } from '../lib/feedback.js';

@@ -49,8 +49,9 @@ const q = {
   allEvents: db.prepare('SELECT * FROM events WHERE profile_id = ? ORDER BY ts'),
   setting: db.prepare('SELECT value FROM settings WHERE key = ?'),
   setSetting: db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value'),
-  customWords: db.prepare('SELECT * FROM custom_words ORDER BY created_at'),
-  insertWord: db.prepare('INSERT INTO custom_words (word, syllables, emoji, world, created_at) VALUES (?, ?, ?, ?, ?)'),
+  customWords: db.prepare('SELECT id, word, syllables, emoji, world, created_at, image_type FROM custom_words ORDER BY created_at'),
+  insertWord: db.prepare('INSERT INTO custom_words (word, syllables, emoji, world, created_at, image, image_type) VALUES (?, ?, ?, ?, ?, ?, ?)'),
+  wordImage: db.prepare('SELECT image, image_type, created_at FROM custom_words WHERE id = ?'),
   deleteWord: db.prepare('DELETE FROM custom_words WHERE id = ?'),
 };
 
@@ -196,17 +197,40 @@ app.put('/api/parent/pin', { preHandler: requireParent }, async (req, reply) => 
 });
 
 /* palabras personalizadas */
-const mapWord = (r) => ({ id: r.id, w: r.word, s: r.syllables.split('-'), e: r.emoji, world: r.world, custom: true });
+const IMAGE_MAX_BYTES = 600 * 1024;
+const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+// La imagen llega como data URL (el navegador ya la reduce de tamaño) y se guarda como BLOB.
+function parseImage(dataUrl) {
+  if (!dataUrl) return null;
+  const m = /^data:(image\/[a-z+]+);base64,([A-Za-z0-9+/=]+)$/.exec(String(dataUrl));
+  if (!m || !IMAGE_TYPES.includes(m[1])) throw new Error('La imagen debe ser JPG, PNG o WEBP.');
+  const buf = Buffer.from(m[2], 'base64');
+  if (buf.length > IMAGE_MAX_BYTES) throw new Error('La imagen es demasiado grande.');
+  return { buf, type: m[1] };
+}
+const mapWord = (r) => ({
+  id: r.id, w: r.word, s: r.syllables.split('-'), e: r.emoji || '🖼️', world: r.world, custom: true,
+  img: r.image_type ? `/api/words/${r.id}/image?v=${r.created_at}` : null,
+});
 app.get('/api/words', async () => q.customWords.all().map(mapWord));
-app.post('/api/words', { preHandler: requireParent }, async (req, reply) => {
-  const { word, syllables, emoji, world } = req.body || {};
+app.get('/api/words/:id/image', async (req, reply) => {
+  const r = q.wordImage.get(Number(req.params.id));
+  if (!r || !r.image) return reply.code(404).send({ error: 'Imagen no encontrada.' });
+  reply.type(r.image_type).header('Cache-Control', 'public, max-age=31536000, immutable');
+  return reply.send(Buffer.from(r.image));
+});
+app.post('/api/words', { preHandler: requireParent, bodyLimit: 2 * 1024 * 1024 }, async (req, reply) => {
+  const { word, syllables, emoji, world, image } = req.body || {};
   const w = String(word || '').trim().toUpperCase().slice(0, 20);
   const s = String(syllables || '').trim().toUpperCase().replace(/\s+/g, '').split('-').filter(Boolean);
-  const e = String(emoji || '').trim().slice(0, 8);
-  if (!w || !s.length || !e) return reply.code(400).send({ error: 'Faltan datos: palabra, sílabas (separadas por guion) y emoji.' });
+  const e = String(emoji || '').trim().slice(0, 16);
+  let img = null;
+  try { img = parseImage(image); } catch (err) { return reply.code(400).send({ error: err.message }); }
+  if (!w || !s.length || (!e && !img)) return reply.code(400).send({ error: 'Faltan datos: palabra, sílabas (separadas por guion) y un emoji o una imagen.' });
   if (s.join('') !== w.replace(/-/g, '')) return reply.code(400).send({ error: 'Las sílabas unidas deben formar la palabra.' });
-  const r = q.insertWord.run(w, s.join('-'), e, String(world || 'general').slice(0, 20), Date.now());
-  return mapWord({ id: r.lastInsertRowid, word: w, syllables: s.join('-'), emoji: e, world: world || 'general' });
+  const now = Date.now();
+  const r = q.insertWord.run(w, s.join('-'), e, String(world || 'general').slice(0, 20), now, img ? img.buf : null, img ? img.type : null);
+  return mapWord({ id: r.lastInsertRowid, word: w, syllables: s.join('-'), emoji: e, world: world || 'general', created_at: now, image_type: img?.type || null });
 });
 app.delete('/api/words/:id', { preHandler: requireParent }, async (req) => {
   q.deleteWord.run(Number(req.params.id));

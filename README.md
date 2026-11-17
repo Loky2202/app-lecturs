@@ -89,7 +89,8 @@ red puedes ver el progreso del niño sin tocar la tablet.
   meta diaria, voz, velocidad de voz, sonidos, pausas activas.
 - "Desbloquear todas las lecciones y juegos" si quieres saltar el orden.
 - Palabras personalizadas: añade los nombres de sus juguetes o personajes
-  (palabra, sílabas con guion, emoji). Aparecen en todos los juegos.
+  (palabra, sílabas con guion y un emoji o una foto). Aparecen en todos los
+  juegos; si tiene foto, se muestra la foto en lugar del emoji.
 - Exportar datos (JSON) y borrar perfil.
 
 ## Contenido
@@ -142,6 +143,7 @@ volumen para no perder el progreso.
 | POST | `/api/parent/login` | PIN → token |
 | PUT | `/api/parent/pin` | cambiar PIN |
 | GET/POST/DELETE | `/api/words` | palabras personalizadas |
+| GET | `/api/words/:id/image` | foto de una palabra personalizada |
 
 ## Desarrollo
 

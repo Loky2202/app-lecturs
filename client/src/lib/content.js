@@ -49,14 +49,18 @@ export function pickWord(p, used) {
   return w;
 }
 
-/* Distractores con emoji o texto distintos al objetivo. */
+/* Identifica el dibujo de una palabra: su foto (si la tiene) o su emoji. */
+export const picKey = (w) => (w.img ? `img:${w.img}` : w.e);
+
+/* Distractores con dibujo o texto distintos al objetivo. */
 export function distractors(target, n, key, p = {}) {
-  const seen = new Set([target[key]]);
+  const k = key === 'e' ? picKey : (w) => w[key];
+  const seen = new Set([k(target)]);
   const base = filterWords({ maxSyl: p.maxSyl });
   const sameWorld = p.world ? base.filter((w) => w.world === p.world) : [];
-  let out = takeDistinct(sameWorld, n, (w) => w[key], seen);
-  if (out.length < n) out = out.concat(takeDistinct(base, n - out.length, (w) => w[key], seen));
-  if (out.length < n) out = out.concat(takeDistinct(allWords(), n - out.length, (w) => w[key], seen));
+  let out = takeDistinct(sameWorld, n, k, seen);
+  if (out.length < n) out = out.concat(takeDistinct(base, n - out.length, k, seen));
+  if (out.length < n) out = out.concat(takeDistinct(allWords(), n - out.length, k, seen));
   return out;
 }
 

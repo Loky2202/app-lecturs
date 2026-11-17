@@ -22,7 +22,7 @@ curl http://localhost:8080/api/health
 
 There is no test suite, linter, or type checker. To check a change, run `npm --prefix client run build` and exercise the app in the browser.
 
-The server needs **Node ≥ 22.13** because it uses the built-in `node:sqlite` (`DatabaseSync`). It has no ORM and no migrations: the schema is `CREATE TABLE IF NOT EXISTS` in `server/src/db.js`. The DB lives in `$DATA_DIR/mision-lectura.sqlite` (default `./data/` in dev, `/data` in Docker). CI (`.github/workflows/docker.yml`) only builds and pushes a multi-arch image to `ghcr.io/loky2202/app-lecturs` when you push to `main`.
+The server needs **Node ≥ 22.13** because it uses the built-in `node:sqlite` (`DatabaseSync`). It has no ORM: the schema is `CREATE TABLE IF NOT EXISTS` in `server/src/db.js`, and new columns are added there with `PRAGMA table_info` checks plus `ALTER TABLE` so existing databases still work. The DB lives in `$DATA_DIR/mision-lectura.sqlite` (default `./data/` in dev, `/data` in Docker). CI (`.github/workflows/docker.yml`) only builds and pushes a multi-arch image to `ghcr.io/loky2202/app-lecturs` when you push to `main`.
 
 ## Architecture
 
@@ -40,7 +40,7 @@ The server needs **Node ≥ 22.13** because it uses the built-in `node:sqlite` (
 - takes a `params` prop (the task object);
 - emits `instruction` and `done`;
 - calls `useGame(props, emit)` from `lib/game.js`, which provides `level`, `world`, `setInstruction`, `finish(firstTry)`, `good` and `bad`;
-- picks words with `pickWord(s)`/`distractors` from `lib/content.js`. These prefer the child's chosen world, relax filters when too few words match, and merge in the parent's custom words from `/api/words`.
+- picks words with `pickWord(s)`/`distractors` from `lib/content.js`. These prefer the child's chosen world, relax filters when too few words match, and merge in the parent's custom words from `/api/words`. Custom words can have a photo (`img` URL, stored as a BLOB in SQLite), so render a word's picture with `components/Pic.vue`, not `{{ w.e }}`. Use `picKey(w)` instead of `w.e` to tell pictures apart.
 
 To add a game:
 1. Create the component.

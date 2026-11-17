@@ -49,6 +49,11 @@ export function openDb(dataDir) {
     );
   `);
 
+  // Migración: imagen opcional para palabras personalizadas
+  const wordCols = db.prepare('PRAGMA table_info(custom_words)').all().map((c) => c.name);
+  if (!wordCols.includes('image')) db.exec('ALTER TABLE custom_words ADD COLUMN image BLOB');
+  if (!wordCols.includes('image_type')) db.exec('ALTER TABLE custom_words ADD COLUMN image_type TEXT');
+
   // PIN de padres por defecto (se puede cambiar desde el panel)
   const pin = db.prepare('SELECT value FROM settings WHERE key = ?').get('parent_pin');
   if (!pin) {

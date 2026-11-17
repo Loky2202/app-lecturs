@@ -35,7 +35,7 @@ const myCar = ({ dinos: '🦖', carros: '🏎️', juegos: '🤖', monstruos: '�
 const me = ref(0); const rival = ref(0); const round = ref(0); const over = ref(false); const won = ref(false);
 let correct = 0;
 const word = computed(() => words[Math.min(round.value, words.length - 1)]);
-const options = computed(() => shuffle([word.value, ...distractors(word.value, 2, 'e', { world, maxSyl })]).map((c) => ({ label: c.e, kind: 'emoji', correct: c.w === word.value.w })));
+const options = computed(() => shuffle([word.value, ...distractors(word.value, 2, 'e', { world, maxSyl })]).map((c) => ({ label: c.e, pic: c, kind: 'emoji', correct: c.w === word.value.w })));
 const pct = (n) => `calc(${(n / STEPS) * 100}% - ${(n / STEPS) * 60}px)`;
 
 const rivalMs = Math.max(1800, 3400 - level * 250);

@@ -310,3 +310,8 @@ input:focus, select:focus { outline: none; border-color: var(--primary); }
   .menu-btn { font-size: 1.05rem; padding: 16px 8px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* Fotos de palabras personalizadas: se escalan con el tamaño de letra del contenedor, como un emoji. */
+.pic { width: 1.3em; height: 1.3em; object-fit: cover; border-radius: .2em; vertical-align: middle; display: inline-block; background: #fff; }
+.word-img { display: flex; align-items: center; gap: 8px; }
+.word-img .thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; }
