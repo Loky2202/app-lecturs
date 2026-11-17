@@ -47,12 +47,16 @@ export function openDb(dataDir) {
       world TEXT NOT NULL DEFAULT 'general',
       created_at INTEGER NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS media (
+      kind TEXT NOT NULL,
+      key TEXT NOT NULL,
+      mime TEXT,
+      data BLOB,
+      text TEXT,
+      updated_at INTEGER NOT NULL,
+      PRIMARY KEY (kind, key)
+    );
   `);
-
-  // Migración: imagen opcional para palabras personalizadas
-  const wordCols = db.prepare('PRAGMA table_info(custom_words)').all().map((c) => c.name);
-  if (!wordCols.includes('image')) db.exec('ALTER TABLE custom_words ADD COLUMN image BLOB');
-  if (!wordCols.includes('image_type')) db.exec('ALTER TABLE custom_words ADD COLUMN image_type TEXT');
 
   // PIN de padres por defecto (se puede cambiar desde el panel)
   const pin = db.prepare('SELECT value FROM settings WHERE key = ?').get('parent_pin');

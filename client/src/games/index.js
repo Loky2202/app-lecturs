@@ -12,8 +12,9 @@ import Memoria from './Memoria.vue';
 import Frase from './Frase.vue';
 import Carrera from './Carrera.vue';
 import Caza from './Caza.vue';
+import Mayus from './Mayus.vue';
 
 export const GAME_COMPONENTS = {
   vocal: Vocal, inicial: Inicial, silaba: Silaba, silabaInicial: SilabaInicial, lee: Lee, escucha: Escucha,
-  arma: Arma, dictado: Dictado, traza: Traza, rima: Rima, memoria: Memoria, frase: Frase, carrera: Carrera, caza: Caza,
+  arma: Arma, dictado: Dictado, traza: Traza, rima: Rima, memoria: Memoria, frase: Frase, carrera: Carrera, caza: Caza, mayus: Mayus,
 };

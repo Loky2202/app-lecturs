@@ -49,10 +49,14 @@ const q = {
   allEvents: db.prepare('SELECT * FROM events WHERE profile_id = ? ORDER BY ts'),
   setting: db.prepare('SELECT value FROM settings WHERE key = ?'),
   setSetting: db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value'),
-  customWords: db.prepare('SELECT id, word, syllables, emoji, world, created_at, image_type FROM custom_words ORDER BY created_at'),
-  insertWord: db.prepare('INSERT INTO custom_words (word, syllables, emoji, world, created_at, image, image_type) VALUES (?, ?, ?, ?, ?, ?, ?)'),
-  wordImage: db.prepare('SELECT image, image_type, created_at FROM custom_words WHERE id = ?'),
+  customWords: db.prepare('SELECT * FROM custom_words ORDER BY created_at'),
+  insertWord: db.prepare('INSERT INTO custom_words (word, syllables, emoji, world, created_at) VALUES (?, ?, ?, ?, ?)'),
   deleteWord: db.prepare('DELETE FROM custom_words WHERE id = ?'),
+  mediaList: db.prepare('SELECT kind, key, text, updated_at FROM media ORDER BY kind, key'),
+  mediaGet: db.prepare('SELECT mime, data FROM media WHERE kind = ? AND key = ?'),
+  mediaPut: db.prepare(`INSERT INTO media (kind, key, mime, data, text, updated_at) VALUES (?, ?, ?, ?, ?, ?)
+    ON CONFLICT(kind, key) DO UPDATE SET mime = excluded.mime, data = excluded.data, text = excluded.text, updated_at = excluded.updated_at`),
+  mediaDelete: db.prepare('DELETE FROM media WHERE kind = ? AND key = ?'),
 };
 
 const summarize = (row) => {
@@ -197,43 +201,56 @@ app.put('/api/parent/pin', { preHandler: requireParent }, async (req, reply) => 
 });
 
 /* palabras personalizadas */
-const IMAGE_MAX_BYTES = 600 * 1024;
-const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-// La imagen llega como data URL (el navegador ya la reduce de tamaño) y se guarda como BLOB.
-function parseImage(dataUrl) {
-  if (!dataUrl) return null;
-  const m = /^data:(image\/[a-z+]+);base64,([A-Za-z0-9+/=]+)$/.exec(String(dataUrl));
-  if (!m || !IMAGE_TYPES.includes(m[1])) throw new Error('La imagen debe ser JPG, PNG o WEBP.');
-  const buf = Buffer.from(m[2], 'base64');
-  if (buf.length > IMAGE_MAX_BYTES) throw new Error('La imagen es demasiado grande.');
-  return { buf, type: m[1] };
-}
-const mapWord = (r) => ({
-  id: r.id, w: r.word, s: r.syllables.split('-'), e: r.emoji || '🖼️', world: r.world, custom: true,
-  img: r.image_type ? `/api/words/${r.id}/image?v=${r.created_at}` : null,
-});
+const mapWord = (r) => ({ id: r.id, w: r.word, s: r.syllables.split('-'), e: r.emoji, world: r.world, custom: true });
 app.get('/api/words', async () => q.customWords.all().map(mapWord));
-app.get('/api/words/:id/image', async (req, reply) => {
-  const r = q.wordImage.get(Number(req.params.id));
-  if (!r || !r.image) return reply.code(404).send({ error: 'Imagen no encontrada.' });
-  reply.type(r.image_type).header('Cache-Control', 'public, max-age=31536000, immutable');
-  return reply.send(Buffer.from(r.image));
-});
-app.post('/api/words', { preHandler: requireParent, bodyLimit: 2 * 1024 * 1024 }, async (req, reply) => {
-  const { word, syllables, emoji, world, image } = req.body || {};
+app.post('/api/words', { preHandler: requireParent }, async (req, reply) => {
+  const { word, syllables, emoji, world } = req.body || {};
   const w = String(word || '').trim().toUpperCase().slice(0, 20);
   const s = String(syllables || '').trim().toUpperCase().replace(/\s+/g, '').split('-').filter(Boolean);
-  const e = String(emoji || '').trim().slice(0, 16);
-  let img = null;
-  try { img = parseImage(image); } catch (err) { return reply.code(400).send({ error: err.message }); }
-  if (!w || !s.length || (!e && !img)) return reply.code(400).send({ error: 'Faltan datos: palabra, sílabas (separadas por guion) y un emoji o una imagen.' });
+  const e = String(emoji || '').trim().slice(0, 8);
+  if (!w || !s.length || !e) return reply.code(400).send({ error: 'Faltan datos: palabra, sílabas (separadas por guion) y emoji.' });
   if (s.join('') !== w.replace(/-/g, '')) return reply.code(400).send({ error: 'Las sílabas unidas deben formar la palabra.' });
-  const now = Date.now();
-  const r = q.insertWord.run(w, s.join('-'), e, String(world || 'general').slice(0, 20), now, img ? img.buf : null, img ? img.type : null);
-  return mapWord({ id: r.lastInsertRowid, word: w, syllables: s.join('-'), emoji: e, world: world || 'general', created_at: now, image_type: img?.type || null });
+  const r = q.insertWord.run(w, s.join('-'), e, String(world || 'general').slice(0, 20), Date.now());
+  return mapWord({ id: r.lastInsertRowid, word: w, syllables: s.join('-'), emoji: e, world: world || 'general' });
 });
 app.delete('/api/words/:id', { preHandler: requireParent }, async (req) => {
   q.deleteWord.run(Number(req.params.id));
+  return { ok: true };
+});
+
+/* imágenes, grabaciones e iconos personalizados
+   kind: image (clave = palabra), audio (clave = w:PALABRA, l:LETRA, s:SÍLABA), icon (clave = palabra, text = emoji) */
+const MEDIA_LIMIT = 3 * 1024 * 1024;
+const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+const MEDIA_KEY = /^[\p{L}\p{N}:]{1,40}$/u;
+app.addContentTypeParser(/^(image|audio)\//, { parseAs: 'buffer', bodyLimit: MEDIA_LIMIT }, (req, body, done) => done(null, body));
+
+app.get('/api/media', async () => q.mediaList.all());
+app.get('/api/media/:kind/:key', async (req, reply) => {
+  const { kind, key } = req.params;
+  const row = (kind === 'image' || kind === 'audio') && q.mediaGet.get(kind, key);
+  if (!row) return reply.code(404).send({ error: 'No encontrado.' });
+  reply.header('Content-Type', row.mime).header('X-Content-Type-Options', 'nosniff').header('Cache-Control', 'public, max-age=31536000, immutable');
+  return reply.send(Buffer.from(row.data));
+});
+app.put('/api/media/:kind/:key', { preHandler: requireParent }, async (req, reply) => {
+  const { kind, key } = req.params;
+  if (!MEDIA_KEY.test(key)) return reply.code(400).send({ error: 'Clave inválida.' });
+  const now = Date.now();
+  if (kind === 'icon') {
+    const emoji = String(req.body?.emoji || '').trim().slice(0, 16);
+    if (!emoji) return reply.code(400).send({ error: 'Falta el icono.' });
+    q.mediaPut.run(kind, key, null, null, emoji, now);
+    return { kind, key, text: emoji, updated_at: now };
+  }
+  const mime = String(req.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+  const okType = kind === 'image' ? IMAGE_TYPES.includes(mime) : kind === 'audio' && mime.startsWith('audio/');
+  if (!okType || !Buffer.isBuffer(req.body) || !req.body.length) return reply.code(400).send({ error: 'Archivo no válido.' });
+  q.mediaPut.run(kind, key, mime, req.body, null, now);
+  return { kind, key, text: null, updated_at: now };
+});
+app.delete('/api/media/:kind/:key', { preHandler: requireParent }, async (req) => {
+  q.mediaDelete.run(req.params.kind, req.params.key);
   return { ok: true };
 });
 

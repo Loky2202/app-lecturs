@@ -1,6 +1,6 @@
 <template>
   <div class="task">
-    <div class="big-emoji"><Pic :word="word" /></div>
+    <div class="big-emoji"><Pic :w="word" /></div>
     <div v-if="showWord" class="question">{{ word.s.join(' · ') }}</div>
     <div class="slots">
       <div v-for="(s, i) in word.s" :key="i" class="slot" :class="{ filled: i < pos }">{{ i < pos ? s : '' }}</div>
@@ -13,8 +13,8 @@
 </template>
 
 <script setup>
-import Pic from '../components/Pic.vue';
 /* Arma la palabra con sílabas. */
+import Pic from '../components/Pic.vue';
 import { ref, reactive } from 'vue';
 import { useGame } from '../lib/game.js';
 import { pickWord } from '../lib/content.js';

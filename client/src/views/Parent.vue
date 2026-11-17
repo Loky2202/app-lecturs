@@ -80,6 +80,7 @@
           <label class="setting"><span>Velocidad de la voz ({{ prog.settings.rate }})</span><input type="range" min="0.6" max="1.1" step="0.05" :value="prog.settings.rate" @change="set('rate', Number($event.target.value))"></label>
           <label class="setting"><span>Sonidos</span><input type="checkbox" :checked="prog.settings.sfx" @change="set('sfx', $event.target.checked)"></label>
           <label class="setting"><span>Pausa activa cada 2 actividades</span><input type="checkbox" :checked="prog.settings.breaks" @change="set('breaks', $event.target.checked)"></label>
+          <label class="setting"><span>Modo oscuro (tarde/noche)</span><input type="checkbox" :checked="prog.settings.darkMode" @change="set('darkMode', $event.target.checked)"></label>
           <label class="setting"><span>Desbloquear todas las lecciones y juegos</span><input type="checkbox" :checked="prog.settings.freePath" @change="set('freePath', $event.target.checked)"></label>
           <label class="setting"><span>Nombre</span><input type="text" :value="child.name" maxlength="20" @change="rename($event.target.value)"></label>
           <p v-if="voiceWarn" class="error">{{ voiceWarn }}</p>
@@ -91,25 +92,23 @@
       </template>
 
       <div class="card">
+        <h3>Imágenes y voces</h3>
+        <p class="small muted">Cambia el icono de una palabra o carga una foto, y graba con tu voz las palabras, letras y sílabas. Si hay imagen o grabación se usa; si no, el icono y la voz del dispositivo.</p>
+        <router-link class="btn secondary" to="/medios">🖼️🎙️ Abrir imágenes y voces</router-link>
+      </div>
+
+      <div class="card">
         <h3>Palabras personalizadas</h3>
-        <p class="small muted">Añade palabras que le gusten (nombres de sus juguetes, su mascota…). Se usan en todos los juegos. Sílabas separadas por guion. Pon un emoji o sube una foto (si hay foto, se muestra la foto).</p>
+        <p class="small muted">Añade palabras que le gusten (nombres de sus juguetes, su mascota…). Se usan en todos los juegos. Sílabas separadas por guion.</p>
         <div class="word-form">
           <input v-model="nw.word" type="text" placeholder="PALABRA" aria-label="Palabra">
           <input v-model="nw.syllables" type="text" placeholder="PA-LA-BRA" aria-label="Sílabas">
-          <input :value="nw.emoji" type="text" placeholder="😀" aria-label="Emoji" @input="nw.emoji = $event.target.value" @change="nw.emoji = $event.target.value">
-          <button class="btn primary" :disabled="addingWord" @click="addWord">Añadir</button>
-        </div>
-        <div class="word-img" style="margin-top: 8px;">
-          <img v-if="nw.image" :src="nw.image" alt="Vista previa" class="thumb">
-          <label class="btn ghost" style="cursor: pointer;">
-            📷 {{ nw.image ? 'Cambiar imagen' : 'Subir imagen' }}
-            <input ref="imageInput" type="file" accept="image/*" hidden @change="pickImage">
-          </label>
-          <button v-if="nw.image" class="btn ghost" @click="clearImage">Quitar</button>
+          <input v-model="nw.emoji" type="text" placeholder="😀" aria-label="Emoji" maxlength="8">
+          <button class="btn primary" @click="addWord">Añadir</button>
         </div>
         <p v-if="wordError" class="error">{{ wordError }}</p>
         <div class="row" style="justify-content: flex-start;">
-          <span v-for="w in app.customWords" :key="w.id" class="badge"><Pic :word="w" /> {{ w.w }} <button class="icon-btn" style="width:28px;height:28px;font-size:.8rem" @click="delWord(w.id)">✖</button></span>
+          <span v-for="w in app.customWords" :key="w.id" class="badge">{{ w.e }} {{ w.w }} <button class="icon-btn" style="width:28px;height:28px;font-size:.8rem" @click="delWord(w.id)">✖</button></span>
         </div>
       </div>
 
@@ -138,8 +137,6 @@
 </template>
 
 <script setup>
-import Pic from '../components/Pic.vue';
-import { shrinkImage } from '../lib/image.js';
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import TopBar from '../components/TopBar.vue';
@@ -157,9 +154,7 @@ const error = ref('');
 const sel = ref(null);
 const prog = ref(null);
 const stats = ref(null);
-const nw = ref({ word: '', syllables: '', emoji: '', image: '' });
-const imageInput = ref(null);
-const addingWord = ref(false);
+const nw = ref({ word: '', syllables: '', emoji: '' });
 const wordError = ref('');
 const newPin = ref('');
 const pinMsg = ref('');
@@ -240,22 +235,12 @@ async function removeProfile() {
 }
 async function addWord() {
   wordError.value = '';
-  addingWord.value = true;
   try {
-    const { word, syllables, emoji, image } = nw.value;
-    await api.addWord({ word, syllables, emoji, image: image || undefined, world: child.value?.favorite || 'general' });
-    nw.value = { word: '', syllables: '', emoji: '', image: '' };
-    if (imageInput.value) imageInput.value.value = '';
+    await api.addWord({ word: nw.value.word, syllables: nw.value.syllables, emoji: nw.value.emoji, world: child.value?.favorite || 'general' });
+    nw.value = { word: '', syllables: '', emoji: '' };
     await app.reloadCustomWords();
-  } catch (e) { wordError.value = e.message; } finally { addingWord.value = false; }
+  } catch (e) { wordError.value = e.message; }
 }
-async function pickImage(ev) {
-  const file = ev.target.files?.[0];
-  if (!file) return;
-  wordError.value = '';
-  try { nw.value.image = await shrinkImage(file); } catch { wordError.value = 'No se pudo leer la imagen.'; }
-}
-function clearImage() { nw.value.image = ''; if (imageInput.value) imageInput.value.value = ''; }
 async function delWord(id) { await api.deleteWord(id); await app.reloadCustomWords(); }
 async function changePin() {
   pinMsg.value = '';

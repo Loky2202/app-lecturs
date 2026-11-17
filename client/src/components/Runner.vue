@@ -34,7 +34,7 @@ function onInstruction({ text, say: s }) { instruction.value = text; say = s; }
 function speak() { if (say) say(); }
 function onDone(r) {
   const task = props.tasks[index.value];
-  const res = { game: task.game, firstTry: r.firstTry, durationMs: r.durationMs, score: r.score };
+  const res = { ...r, game: task.game, firstTry: r.firstTry, durationMs: r.durationMs, score: r.score };
   results.value.push(res);
   app.recordTask({ game: task.game, firstTry: r.firstTry, lessonId: props.lessonId, world: props.world || task.world, durationMs: r.durationMs });
   Voice.stop();

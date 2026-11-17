@@ -5,12 +5,22 @@ pensado para un niño al que le cuesta mantener la atención. Se instala en un
 servidor de casa (Docker / CasaOS) y se usa desde la tablet por red local, sin
 internet.
 
-- **Camino de aprendizaje**: 44 lecciones en 6 unidades (vocales, primeras
+- **Camino de aprendizaje**: 49 lecciones en 6 unidades (vocales, primeras
   letras, más letras, palabras, frases y cuentos). Cada lección enseña primero
   (letra, sonido, sílabas y palabras con voz) y después practica con juegos.
-- **14 juegos** de modo libre con 4 mundos: dinosaurios, carros, videojuegos y
+- **Palabras descifrables**: cada lección solo usa palabras que se pueden leer
+  con las letras ya enseñadas (sin dígrafos ni grupos como TR o PL antes de
+  tiempo). La Ñ, la QU y la RR se practican dentro de la palabra.
+- **Mayúsculas y minúsculas**: las letras se aprenden en mayúscula y una
+  lección propia ("Las letras pequeñas") hace el paso a las minúsculas antes
+  de las frases y los cuentos.
+- **15 juegos** de modo libre con 4 mundos: dinosaurios, carros, videojuegos y
   monstruitos coleccionables.
-- **6 cuentos** por páginas con preguntas de comprensión.
+- **8 cuentos** por páginas con preguntas de comprensión: dos en mayúsculas,
+  muy cortos, se abren al terminar las primeras consonantes.
+- **Sonidos grabados (opcional)**: si copias audios de los sonidos de las letras
+  en `client/public/sounds/` (ver el README de esa carpeta) la app los usa en
+  vez de la voz del sistema, que dice "pe" en lugar de "p".
 - **Motivación**: estrellas, álbum de 40 tarjetas, 19 logros, mascota que
   evoluciona, meta diaria y racha de días.
 - **Atención**: una tarea por pantalla, instrucciones en voz alta, misiones
@@ -89,9 +99,15 @@ red puedes ver el progreso del niño sin tocar la tablet.
   meta diaria, voz, velocidad de voz, sonidos, pausas activas.
 - "Desbloquear todas las lecciones y juegos" si quieres saltar el orden.
 - Palabras personalizadas: añade los nombres de sus juguetes o personajes
-  (palabra, sílabas con guion y un emoji o una foto). Aparecen en todos los
-  juegos; si tiene foto, se muestra la foto en lugar del emoji.
+  (palabra, sílabas con guion, emoji). Aparecen en todos los juegos.
 - Exportar datos (JSON) y borrar perfil.
+- **Imágenes y voces**: para cada palabra puedes cambiar el icono o cargar
+  una imagen (foto de su juguete, de su perro…). Si hay imagen se muestra la
+  imagen; si no, el icono. También puedes grabar con tu voz las palabras, las
+  letras y las sílabas: si hay grabación se usa; si no, la voz del dispositivo.
+  Grabar con el micrófono desde el navegador solo funciona en conexión segura
+  (https o localhost); por `http://IP:8080` usa «Subir audio» con un archivo
+  de la grabadora del dispositivo. Todo se guarda en la base de datos de `/data`.
 
 ## Contenido
 
@@ -143,7 +159,8 @@ volumen para no perder el progreso.
 | POST | `/api/parent/login` | PIN → token |
 | PUT | `/api/parent/pin` | cambiar PIN |
 | GET/POST/DELETE | `/api/words` | palabras personalizadas |
-| GET | `/api/words/:id/image` | foto de una palabra personalizada |
+| GET | `/api/media` | lista de imágenes, grabaciones e iconos |
+| GET/PUT/DELETE | `/api/media/:kind/:key` | archivo (`image`, `audio`) o icono (`icon`); escribir pide PIN |
 
 ## Desarrollo
 

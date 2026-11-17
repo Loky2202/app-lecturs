@@ -10,7 +10,7 @@
     <template v-if="page < story.pages.length">
       <div class="story-page">
         <div class="se">{{ story.pages[page].e }}</div>
-        <p class="st">
+        <p class="st" :class="{ upper: story.upper }">
           <span v-for="(w, i) in words" :key="i" class="wd" @click="sayWord(w)">{{ w }} </span>
         </p>
       </div>
@@ -51,7 +51,10 @@ const start = Date.now();
 const words = computed(() => props.story.pages[page.value].t.split(' '));
 const options = computed(() => {
   const q = props.story.questions[qi.value];
-  return q.o.map((o, i) => ({ label: o, kind: 'emoji', correct: i === q.ans, hint: `${props.story.pages.map((p) => p.t).join(' ')} ${q.q}` }));
+  // la pista lee solo la página donde está la respuesta (no todo el cuento)
+  const pages = props.story.pages;
+  const src = q.page !== undefined && pages[q.page] ? pages[q.page].t : pages.map((p) => p.t).join(' ');
+  return q.o.map((o, i) => ({ label: o, kind: 'emoji', correct: i === q.ans, hint: `Escucha: ${src} ${q.q}` }));
 });
 
 function readPage() {

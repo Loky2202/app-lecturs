@@ -1,14 +1,14 @@
 <template>
   <div class="task">
-    <div class="big-emoji"><Pic :word="word" /></div>
+    <div class="big-emoji"><Pic :w="word" /></div>
     <BigWord :word="word.w" :blank="0" :blank-len="answer.length" />
     <OptionGrid :options="options" :cols="3" :ok-speak="`${spoken(word.w)}. ¡Eso es!`" @done="(r) => finish(r.firstTry)" />
   </div>
 </template>
 
 <script setup>
-import Pic from '../components/Pic.vue';
 /* ¿Con qué letra empieza? */
+import Pic from '../components/Pic.vue';
 import OptionGrid from '../components/OptionGrid.vue';
 import BigWord from '../components/BigWord.vue';
 import { useGame } from '../lib/game.js';
