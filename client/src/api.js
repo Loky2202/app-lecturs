@@ -3,7 +3,8 @@ const BASE = '/api';
 let parentToken = sessionStorage.getItem('parentToken') || '';
 
 async function request(method, path, body, parent = false, keepalive = false) {
-  const headers = { 'Content-Type': 'application/json' };
+  // Sin cuerpo no se envía Content-Type: Fastify rechaza un JSON vacío (los DELETE fallaban).
+  const headers = body === undefined ? {} : { 'Content-Type': 'application/json' };
   if (parent && parentToken) headers['x-parent-token'] = parentToken;
   // keepalive: la petición sobrevive aunque se cierre la pestaña (guardado al salir)
   const res = await fetch(BASE + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), keepalive });

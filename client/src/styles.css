@@ -349,3 +349,8 @@ input:focus, select:focus { outline: none; border-color: var(--primary); }
 .case-item:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--border); }
 .case-item.said { background: var(--highlight-bg); }
 .story-page .st.upper { letter-spacing: .08em; font-size: 1.95rem; }
+
+/* Foto en el formulario de palabras personalizadas */
+.word-img { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.word-img .thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; }
+.word-img label.btn { cursor: pointer; }

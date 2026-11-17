@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Misión Lectura: a Spanish-language reading app for 6-year-olds, self-hosted on a home server (Docker/CasaOS) and used from a tablet on the local network. All UI text, code comments, commit messages and docs are in Spanish; keep that convention.
 
-**Hard constraint: no internet at runtime.** No CDNs, web fonts, or external services. Speech uses the browser's `speechSynthesis` (`client/src/lib/voice.js`), and pictures are emoji, or photos the parents upload for custom words, which are served from the app's own SQLite.
+**Hard constraint: no internet at runtime.** No CDNs, web fonts, or external services. Speech uses the browser's `speechSynthesis` (`client/src/lib/voice.js`), unless parents have recorded their own audio. Pictures are emoji, unless parents have uploaded a photo. Recordings and photos are stored in the app's own SQLite (see Media below).
 
 ## Commands
 
@@ -22,7 +22,7 @@ curl http://localhost:8080/api/health
 
 There is no test suite, linter, or type checker. To check a change, run `npm --prefix client run build` and exercise the app in the browser.
 
-The server needs **Node ≥ 22.13** because it uses the built-in `node:sqlite` (`DatabaseSync`). It has no ORM: the schema is `CREATE TABLE IF NOT EXISTS` in `server/src/db.js`, and new columns are added there with `PRAGMA table_info` checks plus `ALTER TABLE` so existing databases still work. The DB lives in `$DATA_DIR/mision-lectura.sqlite` (default `./data/` in dev, `/data` in Docker). CI (`.github/workflows/docker.yml`) only builds and pushes a multi-arch image to `ghcr.io/loky2202/app-lecturs` when you push to `main`.
+The server needs **Node ≥ 22.13** because it uses the built-in `node:sqlite` (`DatabaseSync`). It has no ORM and no migrations: the schema is `CREATE TABLE IF NOT EXISTS` in `server/src/db.js`. Existing databases only gain new tables, so if you add a column to an existing table, add a `PRAGMA table_info` check plus `ALTER TABLE`. The DB lives in `$DATA_DIR/mision-lectura.sqlite` (default `./data/` in dev, `/data` in Docker). CI (`.github/workflows/docker.yml`) only builds and pushes a multi-arch image to `ghcr.io/loky2202/app-lecturs` when you push to `main`.
 
 ## Architecture
 
@@ -40,7 +40,7 @@ The server needs **Node ≥ 22.13** because it uses the built-in `node:sqlite` (
 - takes a `params` prop (the task object);
 - emits `instruction` and `done`;
 - calls `useGame(props, emit)` from `lib/game.js`, which provides `level`, `world`, `setInstruction`, `finish(firstTry)`, `good` and `bad`;
-- picks words with `pickWord(s)`/`distractors` from `lib/content.js`. These prefer the child's chosen world, relax filters when too few words match, and merge in the parent's custom words from `/api/words`. Custom words can have a photo (`img` URL, stored as a BLOB in SQLite), so render a word's picture with `components/Pic.vue`, not `{{ w.e }}`. Use `picKey(w)` instead of `w.e` to tell pictures apart.
+- picks words with `pickWord(s)`/`distractors` from `lib/content.js`. These prefer the child's chosen world, relax filters when too few words match, and merge in the parent's custom words from `/api/words`. Render a word's picture with `<Pic :w="word" />` (`components/Pic.vue`), not `{{ w.e }}`, so parent overrides apply.
 
 To add a game:
 1. Create the component.
@@ -55,5 +55,14 @@ To add a game:
 - `misc.js`: worlds, trophies, games, breaks, avatars.
 
 Lesson and story IDs are stored in saved progress, so renaming them orphans existing progress.
+
+**Media (parent overrides).** The server keeps a `media` table of `(kind, key)` rows, exposed at `/api/media`:
+- `image`: a photo, keyed by the word in uppercase.
+- `icon`: a replacement emoji, keyed by the word.
+- `audio`: a recording, keyed by `w:PALABRA`, `l:LETRA` or `s:SÍLABA`.
+
+Images and audio upload as raw bodies with their own `Content-Type`, and writing needs the parent PIN. `client/src/lib/media.js` loads the list into a reactive `media` object. It provides `imageUrl`, `iconFor`, `recordingFor`, `saveMedia`/`removeMedia`, and `shrinkImage`, which resizes a photo before upload. `Pic.vue` and `voice.js` check it first. Parents manage it in `views/Media.vue` ("Imágenes y voces"); the custom-words form in `views/Parent.vue` can also attach a photo when it creates a word.
+
+`client/src/api.js` sends `Content-Type: application/json` only when the request has a body, because Fastify rejects an empty JSON body. That is what makes DELETE requests work.
 
 **Routing** (`client/src/router.js`): Spanish paths (`/camino`, `/leccion/:id`, `/jugar/:game`, `/cuento/:id`, `/padres`, …). A global guard sends the user to `/perfiles` until a profile is selected, except on routes with `meta.noProfile`.
