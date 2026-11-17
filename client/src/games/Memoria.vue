@@ -2,7 +2,7 @@
   <div class="task">
     <div class="memory" :class="`pairs-${pairs}`" :style="{ '--mcolor': worldColor }">
       <button v-for="(c, i) in cards" :key="i" class="mcard" :class="[c.kind, c.state]" @click="flip(i)">
-        <span class="back">❓</span><span class="face"><template v-if="c.kind === 'word'">{{ c.w.w }}</template><Pic v-else :w="c.w" /></span>
+        <span class="back">❓</span><span class="face"><template v-if="c.kind === 'word'">{{ p.lower ? c.w.w.toLowerCase() : c.w.w }}</template><Pic v-else :w="c.w" /></span>
       </button>
     </div>
   </div>

@@ -94,6 +94,7 @@ export const GAMES = [
   { id: 'dictado', n: 'Dictado', e: '✏️', d: 'Escribe la palabra con letras.', minLevel: 3 },
   { id: 'traza', n: 'Traza la letra', e: '🖍️', d: 'Dibuja la letra con el dedo.', minLevel: 1 },
   { id: 'rima', n: 'Rimas', e: '🎵', d: '¿Cuál rima?', minLevel: 3 },
+  { id: 'mayus', n: 'Grande y pequeña', e: '🔡', d: 'Une la mayúscula con la minúscula.', minLevel: 3 },
   { id: 'memoria', n: 'Memoria', e: '🃏', d: 'Encuentra las parejas.', minLevel: 2 },
   { id: 'frase', n: 'Lee la frase', e: '💬', d: 'Lee y responde la pregunta.', minLevel: 4 },
   { id: 'carrera', n: 'Carrera de lectura', e: '🏁', d: 'Lee rápido y gana la carrera.', minLevel: 3 },
