@@ -2,7 +2,7 @@
   <div class="task">
     <div class="memory" :class="`pairs-${pairs}`" :style="{ '--mcolor': worldColor }">
       <button v-for="(c, i) in cards" :key="i" class="mcard" :class="[c.kind, c.state]" @click="flip(i)">
-        <span class="back">❓</span><span class="face">{{ c.kind === 'word' ? c.w.w : c.w.e }}</span>
+        <span class="back">❓</span><span class="face"><template v-if="c.kind === 'word'">{{ c.w.w }}</template><Pic v-else :w="c.w" /></span>
       </button>
     </div>
   </div>
@@ -14,6 +14,7 @@ import { reactive } from 'vue';
 import { useGame } from '../lib/game.js';
 import { pickWords } from '../lib/content.js';
 import { worldById } from '../content/misc.js';
+import Pic from '../components/Pic.vue';
 import { Voice } from '../lib/voice.js';
 import { Sfx } from '../lib/sfx.js';
 import { shuffle, spoken, wait } from '../lib/utils.js';

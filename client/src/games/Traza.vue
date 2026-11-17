@@ -50,7 +50,7 @@ function down(e) { drawing = true; strokes++; draw.value.setPointerCapture?.(e.p
 function move(e) { if (!drawing) return; const p = pt(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }
 function up() { drawing = false; }
 function clear() { ctx.clearRect(0, 0, SIZE, SIZE); strokes = 0; }
-function sayIt() { Voice.speak(`La letra ${info.name}. ${info.tip || ''}`); }
+function sayIt() { Voice.speak(`La letra ${info.name}. ${info.tip || ''}`, { rec: `l:${letter}` }); }
 
 function coverage() {
   const g = guide.value.getContext('2d').getImageData(0, 0, SIZE, SIZE).data;

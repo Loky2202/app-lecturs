@@ -1,6 +1,6 @@
 <template>
   <div class="task">
-    <div class="big-emoji">{{ word.e }}</div>
+    <div class="big-emoji"><Pic :w="word" /></div>
     <div v-if="reveal" class="question">{{ word.s.join(' - ') }}</div>
     <div class="slots">
       <div v-for="(ch, i) in letters" :key="i" class="slot small" :class="{ filled: i < pos }">{{ i < pos ? ch : '' }}</div>
@@ -14,6 +14,7 @@
 
 <script setup>
 /* Dictado: escucha la palabra y escríbela con las letras. */
+import Pic from '../components/Pic.vue';
 import { ref, reactive } from 'vue';
 import { useGame } from '../lib/game.js';
 import { pickWord } from '../lib/content.js';

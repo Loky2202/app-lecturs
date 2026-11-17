@@ -47,6 +47,15 @@ export function openDb(dataDir) {
       world TEXT NOT NULL DEFAULT 'general',
       created_at INTEGER NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS media (
+      kind TEXT NOT NULL,
+      key TEXT NOT NULL,
+      mime TEXT,
+      data BLOB,
+      text TEXT,
+      updated_at INTEGER NOT NULL,
+      PRIMARY KEY (kind, key)
+    );
   `);
 
   // PIN de padres por defecto (se puede cambiar desde el panel)

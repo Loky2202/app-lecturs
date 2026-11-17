@@ -91,6 +91,13 @@ red puedes ver el progreso del niño sin tocar la tablet.
 - Palabras personalizadas: añade los nombres de sus juguetes o personajes
   (palabra, sílabas con guion, emoji). Aparecen en todos los juegos.
 - Exportar datos (JSON) y borrar perfil.
+- **Imágenes y voces**: para cada palabra puedes cambiar el icono o cargar
+  una imagen (foto de su juguete, de su perro…). Si hay imagen se muestra la
+  imagen; si no, el icono. También puedes grabar con tu voz las palabras, las
+  letras y las sílabas: si hay grabación se usa; si no, la voz del dispositivo.
+  Grabar con el micrófono desde el navegador solo funciona en conexión segura
+  (https o localhost); por `http://IP:8080` usa «Subir audio» con un archivo
+  de la grabadora del dispositivo. Todo se guarda en la base de datos de `/data`.
 
 ## Contenido
 
@@ -142,6 +149,8 @@ volumen para no perder el progreso.
 | POST | `/api/parent/login` | PIN → token |
 | PUT | `/api/parent/pin` | cambiar PIN |
 | GET/POST/DELETE | `/api/words` | palabras personalizadas |
+| GET | `/api/media` | lista de imágenes, grabaciones e iconos |
+| GET/PUT/DELETE | `/api/media/:kind/:key` | archivo (`image`, `audio`) o icono (`icon`); escribir pide PIN |
 
 ## Desarrollo
 

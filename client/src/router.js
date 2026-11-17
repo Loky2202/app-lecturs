@@ -13,6 +13,7 @@ const routes = [
   { path: '/album', name: 'album', component: () => import('./views/Album.vue') },
   { path: '/logros', name: 'trophies', component: () => import('./views/Trophies.vue') },
   { path: '/padres', name: 'parent', component: () => import('./views/Parent.vue'), meta: { noProfile: true } },
+  { path: '/medios', name: 'media', component: () => import('./views/Media.vue'), meta: { noProfile: true } },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ];
 

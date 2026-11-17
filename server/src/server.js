@@ -52,6 +52,11 @@ const q = {
   customWords: db.prepare('SELECT * FROM custom_words ORDER BY created_at'),
   insertWord: db.prepare('INSERT INTO custom_words (word, syllables, emoji, world, created_at) VALUES (?, ?, ?, ?, ?)'),
   deleteWord: db.prepare('DELETE FROM custom_words WHERE id = ?'),
+  mediaList: db.prepare('SELECT kind, key, text, updated_at FROM media ORDER BY kind, key'),
+  mediaGet: db.prepare('SELECT mime, data FROM media WHERE kind = ? AND key = ?'),
+  mediaPut: db.prepare(`INSERT INTO media (kind, key, mime, data, text, updated_at) VALUES (?, ?, ?, ?, ?, ?)
+    ON CONFLICT(kind, key) DO UPDATE SET mime = excluded.mime, data = excluded.data, text = excluded.text, updated_at = excluded.updated_at`),
+  mediaDelete: db.prepare('DELETE FROM media WHERE kind = ? AND key = ?'),
 };
 
 const summarize = (row) => {
@@ -210,6 +215,42 @@ app.post('/api/words', { preHandler: requireParent }, async (req, reply) => {
 });
 app.delete('/api/words/:id', { preHandler: requireParent }, async (req) => {
   q.deleteWord.run(Number(req.params.id));
+  return { ok: true };
+});
+
+/* imágenes, grabaciones e iconos personalizados
+   kind: image (clave = palabra), audio (clave = w:PALABRA, l:LETRA, s:SÍLABA), icon (clave = palabra, text = emoji) */
+const MEDIA_LIMIT = 3 * 1024 * 1024;
+const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+const MEDIA_KEY = /^[\p{L}\p{N}:]{1,40}$/u;
+app.addContentTypeParser(/^(image|audio)\//, { parseAs: 'buffer', bodyLimit: MEDIA_LIMIT }, (req, body, done) => done(null, body));
+
+app.get('/api/media', async () => q.mediaList.all());
+app.get('/api/media/:kind/:key', async (req, reply) => {
+  const { kind, key } = req.params;
+  const row = (kind === 'image' || kind === 'audio') && q.mediaGet.get(kind, key);
+  if (!row) return reply.code(404).send({ error: 'No encontrado.' });
+  reply.header('Content-Type', row.mime).header('X-Content-Type-Options', 'nosniff').header('Cache-Control', 'public, max-age=31536000, immutable');
+  return reply.send(Buffer.from(row.data));
+});
+app.put('/api/media/:kind/:key', { preHandler: requireParent }, async (req, reply) => {
+  const { kind, key } = req.params;
+  if (!MEDIA_KEY.test(key)) return reply.code(400).send({ error: 'Clave inválida.' });
+  const now = Date.now();
+  if (kind === 'icon') {
+    const emoji = String(req.body?.emoji || '').trim().slice(0, 16);
+    if (!emoji) return reply.code(400).send({ error: 'Falta el icono.' });
+    q.mediaPut.run(kind, key, null, null, emoji, now);
+    return { kind, key, text: emoji, updated_at: now };
+  }
+  const mime = String(req.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+  const okType = kind === 'image' ? IMAGE_TYPES.includes(mime) : kind === 'audio' && mime.startsWith('audio/');
+  if (!okType || !Buffer.isBuffer(req.body) || !req.body.length) return reply.code(400).send({ error: 'Archivo no válido.' });
+  q.mediaPut.run(kind, key, mime, req.body, null, now);
+  return { kind, key, text: null, updated_at: now };
+});
+app.delete('/api/media/:kind/:key', { preHandler: requireParent }, async (req) => {
+  q.mediaDelete.run(req.params.kind, req.params.key);
   return { ok: true };
 });
 

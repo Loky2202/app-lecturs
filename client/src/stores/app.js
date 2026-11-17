@@ -7,6 +7,7 @@ import { api } from '../api.js';
 import { Voice } from '../lib/voice.js';
 import { Sfx } from '../lib/sfx.js';
 import { setCustomWords } from '../lib/content.js';
+import { loadMedia } from '../lib/media.js';
 import { todayKey, dayKeyOffset } from '../lib/utils.js';
 import { UNITS, ALL_LESSONS, unitOfLesson } from '../content/lessons.js';
 import { WORLDS, TROPHIES, worldById } from '../content/misc.js';
@@ -102,6 +103,7 @@ export const useApp = defineStore('app', {
       this.applySettings();
       try { this.customWords = await api.customWords(); } catch { this.customWords = []; }
       setCustomWords(this.customWords);
+      loadMedia();
       return true;
     },
     async createProfile(data) {

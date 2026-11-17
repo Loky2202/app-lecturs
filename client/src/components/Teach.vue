@@ -10,7 +10,7 @@
       </div>
       <div class="word-list">
         <button v-for="w in examples" :key="w.w" class="word-item" @click="sayWord(w)">
-          <span class="we">{{ w.e }}</span><span class="ww">{{ w.w }}</span>
+          <span class="we"><Pic :w="w" /></span><span class="ww">{{ w.w }}</span>
         </button>
       </div>
     </template>
@@ -24,7 +24,7 @@
       </div>
       <div class="word-list">
         <button v-for="w in examples" :key="w.w" class="word-item" @click="sayWord(w)">
-          <span class="we">{{ w.e }}</span><span class="ww">{{ w.w }}</span><span class="ws">{{ w.s.join(' - ') }}</span>
+          <span class="we"><Pic :w="w" /></span><span class="ww">{{ w.w }}</span><span class="ws">{{ w.s.join(' - ') }}</span>
         </button>
       </div>
     </template>
@@ -34,7 +34,7 @@
       <p class="lead center">Toca cada palabra para oírla por sílabas.</p>
       <div class="word-list">
         <button v-for="w in examples" :key="w.w" class="word-item" @click="sayWord(w)">
-          <span class="we">{{ w.e }}</span><span class="ww">{{ w.w }}</span><span class="ws">{{ w.s.join(' - ') }}</span>
+          <span class="we"><Pic :w="w" /></span><span class="ww">{{ w.w }}</span><span class="ws">{{ w.s.join(' - ') }}</span>
         </button>
       </div>
     </template>
@@ -52,6 +52,7 @@
 <script setup>
 /* Pantallas de enseñanza de una lección. */
 import { computed, reactive, watch } from 'vue';
+import Pic from './Pic.vue';
 import { Voice } from '../lib/voice.js';
 import { Sfx } from '../lib/sfx.js';
 import { LETTER_INFO } from '../content/words.js';
@@ -74,7 +75,7 @@ const examples = computed(() => {
   return ordered.slice(0, s.count || 4);
 });
 
-function sayLetter() { Voice.speak(`Esta es la letra ${info.value.name}. ${info.value.sound ? `Suena ${info.value.sound}.` : ''} ${info.value.tip}`); }
+function sayLetter() { Voice.speak(`Esta es la letra ${info.value.name}. ${info.value.sound ? `Suena ${info.value.sound}.` : ''} ${info.value.tip}`, { rec: `l:${props.screen.letter}` }); }
 function saySound() { Voice.speak(info.value.sound, { rate: 0.7 }); }
 function saySyl(s) { Sfx.play('tap'); said.add(s); Voice.speak(spoken(s), { rate: 0.75 }); }
 function sayWord(w) { Sfx.play('tap'); Voice.speak(`${w.s.map(spoken).join('. ')}. ${spoken(w.w)}.`, { rate: 0.8 }); }

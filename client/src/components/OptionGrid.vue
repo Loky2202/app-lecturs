@@ -6,7 +6,8 @@
       :disabled="locked || state[i] === 'bad'"
       @click="choose(i)"
     >
-      <small v-if="o.sub">{{ o.sub }}</small>{{ o.label }}
+      <template v-if="o.word && o.kind === 'emoji'"><Pic :w="o.word" /></template>
+      <template v-else><small v-if="o.sub"><Pic v-if="o.word" :w="o.word" /><template v-else>{{ o.sub }}</template></small>{{ o.label }}</template>
       <span v-if="state[i] === 'ok'" class="opt-mark ok" aria-hidden="true">✓</span>
       <span v-else-if="state[i] === 'bad'" class="opt-mark bad" aria-hidden="true">✗</span>
     </button>
@@ -16,13 +17,14 @@
 <script setup>
 /* Cuadrícula de opciones con acierto/error/pista. Emite done({ firstTry }). */
 import { ref, reactive } from 'vue';
+import Pic from './Pic.vue';
 import { Sfx } from '../lib/sfx.js';
 import { Voice } from '../lib/voice.js';
 import { showFeedback, praise, retry } from '../lib/feedback.js';
 import { wait } from '../lib/utils.js';
 
 const props = defineProps({
-  options: { type: Array, required: true }, // [{ label, sub?, kind?, correct, hint? }]
+  options: { type: Array, required: true }, // [{ label, sub?, word?, kind?, correct, hint? }]
   cols: { type: Number, default: 0 },
   okSpeak: { type: String, default: '' },
   delay: { type: Number, default: 1100 },

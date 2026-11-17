@@ -92,6 +92,12 @@
       </template>
 
       <div class="card">
+        <h3>Imágenes y voces</h3>
+        <p class="small muted">Cambia el icono de una palabra o carga una foto, y graba con tu voz las palabras, letras y sílabas. Si hay imagen o grabación se usa; si no, el icono y la voz del dispositivo.</p>
+        <router-link class="btn secondary" to="/medios">🖼️🎙️ Abrir imágenes y voces</router-link>
+      </div>
+
+      <div class="card">
         <h3>Palabras personalizadas</h3>
         <p class="small muted">Añade palabras que le gusten (nombres de sus juguetes, su mascota…). Se usan en todos los juegos. Sílabas separadas por guion.</p>
         <div class="word-form">

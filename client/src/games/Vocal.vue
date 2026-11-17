@@ -1,6 +1,6 @@
 <template>
   <div class="task">
-    <div class="big-emoji">{{ word.e }}</div>
+    <div class="big-emoji"><Pic :w="word" /></div>
     <BigWord :word="word.w" :blank="pos" />
     <OptionGrid :options="options" :ok-speak="`${spoken(word.w)}. ¡Muy bien!`" @done="(r) => finish(r.firstTry)" />
   </div>
@@ -8,6 +8,7 @@
 
 <script setup>
 /* ¿Qué vocal falta? */
+import Pic from '../components/Pic.vue';
 import OptionGrid from '../components/OptionGrid.vue';
 import BigWord from '../components/BigWord.vue';
 import { useGame } from '../lib/game.js';
