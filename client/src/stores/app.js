@@ -19,7 +19,7 @@ export const defaultProgress = () => ({
   stars: 0, missions: 0, level: 1, manualLevel: false, levelHistory: [],
   lessons: {}, stories: {}, cards: { dinos: 0, carros: 0, juegos: 0, monstruos: 0 },
   trophies: {}, stats: {}, days: {},
-  settings: { voice: true, autoRead: true, sfx: true, breaks: true, missionLength: 5, rate: 0.85, dailyGoal: 3, freePath: false },
+  settings: { voice: true, autoRead: true, sfx: true, breaks: true, missionLength: 5, rate: 0.85, dailyGoal: 3, freePath: false, darkMode: false },
 });
 
 let saveTimer = null;
@@ -119,6 +119,7 @@ export const useApp = defineStore('app', {
     applySettings() {
       Voice.configure({ enabled: this.settings.voice, rate: this.settings.rate });
       Sfx.configure({ enabled: this.settings.sfx });
+      document.documentElement.setAttribute('data-theme', this.settings.darkMode ? 'dark' : 'light');
     },
     setSetting(key, value) {
       this.progress.settings[key] = value;
@@ -269,6 +270,11 @@ export const useApp = defineStore('app', {
       if (ratio >= 0.99 && results.length >= 4) give('perfecta');
       if (results.some((r) => r.game === 'carrera' && r.firstTry)) give('velocista');
       if (results.some((r) => r.game === 'caza' && r.firstTry)) give('cazador');
+      if (results.some((r) => r.game === 'traza' && r.great)) give('trazo-perfecto');
+      if (kind === 'story' && ratio >= 0.99) give('cuento-perfecto');
+      if (results.some((r) => r.game === 'carrera' && r.perfect)) give('carrera-perfecta');
+      if (results.some((r) => r.game === 'memoria' && r.perfect)) give('memoria-sin-fallos');
+      if (this.streak >= 14) give('racha-14');
     },
   },
 });

@@ -60,7 +60,7 @@ async function end(w) {
   showFeedback(w ? '¡Ganaste la carrera!' : 'Casi. El rival ganó esta vez.', !w);
   Voice.speak(w ? '¡Ganaste la carrera! Eres muy rápido leyendo.' : 'Casi. El rival ganó esta vez. La próxima será tuya.');
   await wait(1600);
-  finish(w, { score: correct });
+  finish(w, { score: correct, perfect: w && correct >= STEPS });
 }
 onBeforeUnmount(() => clearInterval(timer));
 setInstruction('¡Lee rápido y toca el dibujo para avanzar!', 'Carrera de lectura. Lee la palabra y toca el dibujo para que tu carro avance. ¡Ya!');

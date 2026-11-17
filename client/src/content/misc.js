@@ -76,6 +76,11 @@ export const TROPHIES = [
   { id: 'velocista', e: '🏁', n: 'Velocista', t: 'Ganaste una carrera de lectura.' },
   { id: 'cazador', e: '🎯', n: 'Cazador', t: 'Una caza perfecta sin fallos.' },
   { id: 'perfecta', e: '💯', n: 'Misión perfecta', t: 'Todo a la primera en una misión.' },
+  { id: 'trazo-perfecto', e: '🖍️', n: 'Mano firme', t: 'Trazaste una letra casi perfecta a la primera.' },
+  { id: 'cuento-perfecto', e: '📖', n: 'Lector atento', t: 'Respondiste bien todas las preguntas de un cuento.' },
+  { id: 'carrera-perfecta', e: '💨', n: 'Rayo veloz', t: 'Ganaste una carrera leyendo todo bien.' },
+  { id: 'memoria-sin-fallos', e: '🧠', n: 'Memoria de elefante', t: 'Encontraste todas las parejas sin equivocarte.' },
+  { id: 'racha-14', e: '🗓️', n: 'Dos semanas seguidas', t: 'Practicaste 14 días seguidos.' },
 ];
 
 export const GAMES = [

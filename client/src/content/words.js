@@ -95,6 +95,7 @@ export const WORDS = [
   W('FLECHA', 'FLE-CHA', '🏹', 'juegos'), W('GRANJA', 'GRAN-JA', '🏡'), W('GRILLO', 'GRI-LLO', '🦗'), W('DRAGÓN', 'DRA-GÓN', '🐉', 'monstruos'),
   W('PREMIO', 'PRE-MIO', '🏅', 'juegos'), W('BLOQUE', 'BLO-QUE', '🧱', 'juegos'), W('CLAVO', 'CLA-VO', '🔩'), W('FRUTA', 'FRU-TA', '🍇'),
   W('CRÁTER', 'CRÁ-TER', '🌋', 'dinos'), W('TRICERATOPS', 'TRI-CE-RA-TOPS', '🦕', 'dinos'),
+  W('DRON', 'DRON', '🚁', 'carros'), W('BROCHA', 'BRO-CHA', '🖌️'), W('BRÚJULA', 'BRÚ-JU-LA', '🧭'), W('FLAN', 'FLAN', '🍮'),
 ];
 
 /* Palabras que empiezan con una letra o dígrafo (sin tilde inicial para vocales). */

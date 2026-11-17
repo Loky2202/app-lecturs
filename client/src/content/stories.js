@@ -92,4 +92,66 @@ export const STORIES = [
       { q: '¿Qué hace Leo al final?', o: ['🏃', '🍕', '🛏️'], ans: 2 },
     ],
   },
+  {
+    id: 'cu-7', title: 'El taxi perdido', emoji: '🚕', world: 'carros', lvl: 1,
+    pages: [
+      { e: '🚕', t: 'Tito es un taxi amarillo. Busca a una niña en la plaza.' },
+      { e: '🗺️', t: 'Tito no encuentra el camino. Mira el mapa con cuidado.' },
+      { e: '🚦', t: 'Pasa por el semáforo rojo y se detiene.' },
+      { e: '👧', t: 'Por fin ve a la niña. ¡Ahí está, cerca del parque!' },
+      { e: '🏠', t: 'Tito la lleva a su casa. La niña dice: ¡Gracias, Tito!' },
+    ],
+    questions: [
+      { q: '¿De qué color es Tito?', o: ['🟡', '🔵', '🟢'], ans: 0 },
+      { q: '¿Qué mira Tito?', o: ['🗺️', '🎲', '🍎'], ans: 0 },
+      { q: '¿A dónde lleva a la niña?', o: ['🏰', '🏠', '🌊'], ans: 1 },
+    ],
+  },
+  {
+    id: 'cu-8', title: 'Frosti y el sol', emoji: '🧊', world: 'monstruos', lvl: 1,
+    pages: [
+      { e: '🧊', t: 'Frosti es un monstruito de hielo. Vive en la nieve.' },
+      { e: '☀️', t: 'Un día sale un sol muy fuerte. Frosti empieza a derretirse.' },
+      { e: '😢', t: 'Frosti se hace pequeño. ¡Necesita ayuda!' },
+      { e: '☁️', t: 'Sus amigos traen una nube grande para dar sombra.' },
+      { e: '🧊', t: 'Frosti se pone fresco otra vez. ¡Gracias, amigos!' },
+    ],
+    questions: [
+      { q: '¿De qué tipo es Frosti?', o: ['🔥', '🧊', '🌱'], ans: 1 },
+      { q: '¿Qué sale muy fuerte?', o: ['☀️', '🌧️', '🌙'], ans: 0 },
+      { q: '¿Qué traen sus amigos?', o: ['☁️', '🪨', '🎈'], ans: 0 },
+    ],
+  },
+  {
+    id: 'cu-9', title: 'El nido perdido', emoji: '🦕', world: 'dinos', lvl: 3,
+    pages: [
+      { e: '🦕', t: 'Mamá dino busca su nido. El viento movió todo el bosque.' },
+      { e: '🍃', t: 'Le pregunta a Lagartín si vio el nido entre las hojas.' },
+      { e: '🦎', t: 'Lagartín dice: no, pero vi algo cerca del volcán.' },
+      { e: '🌋', t: 'Mamá dino camina hasta el volcán con mucho cuidado.' },
+      { e: '🥚', t: 'Ahí está el nido, detrás de una roca grande.' },
+      { e: '🦖', t: 'Mamá dino se alegra mucho y vuelve a cuidar sus huevos.' },
+    ],
+    questions: [
+      { q: '¿Qué movió el viento?', o: ['🌳', '🚗', '🎮'], ans: 0 },
+      { q: '¿Quién vio algo cerca del volcán?', o: ['🦎', '🤖', '🐸'], ans: 0 },
+      { q: '¿Dónde estaba el nido?', o: ['🏰', '🪨', '🌊'], ans: 1 },
+    ],
+  },
+  {
+    id: 'cu-10', title: 'El mapa del tesoro', emoji: '🗺️', world: 'juegos', lvl: 3,
+    pages: [
+      { e: '🗺️', t: 'Pip el mago encuentra un mapa viejo en el castillo.' },
+      { e: '❌', t: 'El mapa muestra una isla con una equis roja.' },
+      { e: '⛵', t: 'Pip sube a un barco pequeño y navega toda la noche.' },
+      { e: '🏝️', t: 'Llega a la isla y camina hasta la equis.' },
+      { e: '💎', t: 'Cava un poco y encuentra un cofre con gemas azules.' },
+      { e: '🏆', t: 'Vuelve al castillo y gana una copa de campeón.' },
+    ],
+    questions: [
+      { q: '¿Qué encuentra Pip?', o: ['🗺️', '🍕', '🚗'], ans: 0 },
+      { q: '¿Cómo llega a la isla?', o: ['🚁', '⛵', '🚗'], ans: 1 },
+      { q: '¿Qué hay en el cofre?', o: ['💎', '🍯', '🪨'], ans: 0 },
+    ],
+  },
 ];

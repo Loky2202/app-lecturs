@@ -7,6 +7,8 @@
       @click="choose(i)"
     >
       <small v-if="o.sub">{{ o.sub }}</small>{{ o.label }}
+      <span v-if="state[i] === 'ok'" class="opt-mark ok" aria-hidden="true">✓</span>
+      <span v-else-if="state[i] === 'bad'" class="opt-mark bad" aria-hidden="true">✗</span>
     </button>
   </div>
 </template>

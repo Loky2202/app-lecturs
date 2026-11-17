@@ -4,6 +4,8 @@ export const SENTENCES = [
   { t: 'Rex tiene un huevo en el nido.', q: '¿Qué hay en el nido?', o: ['🦴', '🥚', '🪨'], ans: 1, lvl: 4, world: 'dinos' },
   { t: 'El tren pasa por el volcán.', q: '¿Por dónde pasa el tren?', o: ['🏰', '🌴', '🌋'], ans: 2, lvl: 4, world: 'dinos' },
   { t: 'El lagarto duerme en la roca.', q: '¿Dónde duerme el lagarto?', o: ['🪨', '🌙', '🚗'], ans: 0, lvl: 4, world: 'dinos' },
+  { t: 'El dino azul salta sobre una roca grande.', q: '¿Sobre qué salta el dino?', o: ['🪨', '🌊', '🔥'], ans: 0, lvl: 4, world: 'dinos' },
+  { t: 'El dino con cuernos come plantas verdes cerca del río.', q: '¿Dónde come el dino?', o: ['🏜️', '🌊', '🌋'], ans: 1, lvl: 5, world: 'dinos' },
   { t: 'El dino bebé sale del huevo y dice hola.', q: '¿De dónde sale el dino bebé?', o: ['🌋', '🥚', '🌳'], ans: 1, lvl: 5, world: 'dinos' },
   { t: 'Un meteoro cae y los dinos corren a la cueva.', q: '¿Qué cae del cielo?', o: ['🍎', '☁️', '☄️'], ans: 2, lvl: 5, world: 'dinos' },
   { t: 'Mi dino favorito tiene tres cuernos y come plantas.', q: '¿Cuántos cuernos tiene?', o: ['3️⃣', '1️⃣', '5️⃣'], ans: 0, lvl: 5, world: 'dinos' },
@@ -15,6 +17,8 @@ export const SENTENCES = [
   { t: 'El semáforo está en rojo y el taxi se para.', q: '¿Qué hace el taxi?', o: ['🏃', '🛑', '🎵'], ans: 1, lvl: 5, world: 'carros' },
   { t: 'El tractor amarillo trabaja en el campo con las vacas.', q: '¿Dónde trabaja el tractor?', o: ['🏙️', '🌊', '🌾'], ans: 2, lvl: 5, world: 'carros' },
   { t: 'El carro de bomberos tiene una escalera muy larga.', q: '¿Qué tiene el carro de bomberos?', o: ['🪜', '🎈', '🍕'], ans: 0, lvl: 5, world: 'carros' },
+  { t: 'El autobús amarillo lleva a los niños a la escuela.', q: '¿A dónde lleva a los niños?', o: ['🏫', '🏖️', '🏰'], ans: 0, lvl: 4, world: 'carros' },
+  { t: 'La grúa levanta el carro averiado y lo lleva al taller.', q: '¿Qué levanta la grúa?', o: ['🚗', '🐘', '🎈'], ans: 0, lvl: 5, world: 'carros' },
 
   { t: 'El robot tiene una llave.', q: '¿Qué tiene el robot?', o: ['🔑', '🎲', '⭐'], ans: 0, lvl: 4, world: 'juegos' },
   { t: 'Hay un tesoro en el castillo.', q: '¿Qué hay en el castillo?', o: ['🐸', '💎', '🚲'], ans: 1, lvl: 4, world: 'juegos' },
@@ -23,6 +27,8 @@ export const SENTENCES = [
   { t: 'El fantasma se esconde y el mago lo busca con luz.', q: '¿Quién busca al fantasma?', o: ['🤖', '🧙', '👾'], ans: 1, lvl: 5, world: 'juegos' },
   { t: 'Si tomas la moneda de oro, ganas una vida más.', q: '¿Qué ganas con la moneda?', o: ['🎁', '🗺️', '❤️'], ans: 2, lvl: 5, world: 'juegos' },
   { t: 'Para pasar el nivel hay que saltar sobre tres bloques.', q: '¿Sobre qué hay que saltar?', o: ['🧱', '🐍', '🌊'], ans: 0, lvl: 5, world: 'juegos' },
+  { t: 'Pip encuentra tres monedas doradas en el camino.', q: '¿Cuántas monedas encuentra?', o: ['3️⃣', '5️⃣', '1️⃣'], ans: 0, lvl: 4, world: 'juegos' },
+  { t: 'El jefe final se cansa después de tres golpes con la espada.', q: '¿Con qué le dan los golpes?', o: ['🗡️', '🔑', '🎲'], ans: 0, lvl: 5, world: 'juegos' },
 
   { t: 'La rana salta al agua.', q: '¿A dónde salta la rana?', o: ['💧', '🔥', '🌙'], ans: 0, lvl: 4, world: 'monstruos' },
   { t: 'El dragón lanza fuego.', q: '¿Qué lanza el dragón?', o: ['💧', '🔥', '⚡'], ans: 1, lvl: 4, world: 'monstruos' },
@@ -31,4 +37,6 @@ export const SENTENCES = [
   { t: 'El pulpo tiene ocho brazos y vive en el mar.', q: '¿Cuántos brazos tiene el pulpo?', o: ['4️⃣', '8️⃣', '2️⃣'], ans: 1, lvl: 5, world: 'monstruos' },
   { t: 'Chispa es de tipo rayo y gana la carrera.', q: '¿De qué tipo es Chispa?', o: ['💧', '🔥', '⚡'], ans: 2, lvl: 5, world: 'monstruos' },
   { t: 'Gotita nada en el río y atrapa un pez.', q: '¿Qué atrapa Gotita?', o: ['🐟', '🍎', '🧊'], ans: 0, lvl: 5, world: 'monstruos' },
+  { t: 'Drako vuela muy alto y toca las nubes.', q: '¿Qué toca Drako?', o: ['☁️', '🌊', '🪨'], ans: 0, lvl: 4, world: 'monstruos' },
+  { t: 'Torbellino gira tan rápido que levanta las hojas del jardín.', q: '¿Qué levanta Torbellino?', o: ['🍃', '🧊', '💎'], ans: 0, lvl: 5, world: 'monstruos' },
 ];

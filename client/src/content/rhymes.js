@@ -17,4 +17,11 @@ export const RHYMES = [
   [{ w: 'OSO', e: '🐻' }, { w: 'POZO', e: '🕳️' }, { w: 'GOZO', e: '😄' }],
   [{ w: 'CASA', e: '🏠' }, { w: 'TAZA', e: '☕' }, { w: 'MASA', e: '🍞' }],
   [{ w: 'TREN', e: '🚆' }, { w: 'REN', e: '🦌' }, { w: 'BIEN', e: '👍' }],
+  [{ w: 'PELOTA', e: '⚽' }, { w: 'LATA', e: '🥫' }, { w: 'PATA', e: '🐾' }],
+  [{ w: 'QUESO', e: '🧀' }, { w: 'HUESO', e: '🦴' }],
+  [{ w: 'OREJA', e: '👂' }, { w: 'ABEJA', e: '🐝' }, { w: 'GRANJA', e: '🏡' }],
+  [{ w: 'MADRE', e: '👩' }, { w: 'PADRE', e: '👨' }, { w: 'TORRE', e: '🏯' }],
+  [{ w: 'ELEFANTE', e: '🐘' }, { w: 'GIGANTE', e: '👹' }],
+  [{ w: 'PIÑA', e: '🍍' }, { w: 'ARAÑA', e: '🕷️' }, { w: 'NIÑA', e: '👧' }],
+  [{ w: 'ISLA', e: '🏝️' }, { w: 'ESCUELA', e: '🏫' }, { w: 'VELA', e: '🕯️' }],
 ];
