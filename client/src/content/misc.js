@@ -76,6 +76,11 @@ export const TROPHIES = [
   { id: 'velocista', e: '🏁', n: 'Velocista', t: 'Ganaste una carrera de lectura.' },
   { id: 'cazador', e: '🎯', n: 'Cazador', t: 'Una caza perfecta sin fallos.' },
   { id: 'perfecta', e: '💯', n: 'Misión perfecta', t: 'Todo a la primera en una misión.' },
+  { id: 'trazo-perfecto', e: '🖍️', n: 'Mano firme', t: 'Trazaste una letra casi perfecta a la primera.' },
+  { id: 'cuento-perfecto', e: '📖', n: 'Lector atento', t: 'Respondiste bien todas las preguntas de un cuento.' },
+  { id: 'carrera-perfecta', e: '💨', n: 'Rayo veloz', t: 'Ganaste una carrera leyendo todo bien.' },
+  { id: 'memoria-sin-fallos', e: '🧠', n: 'Memoria de elefante', t: 'Encontraste todas las parejas sin equivocarte.' },
+  { id: 'racha-14', e: '🗓️', n: 'Dos semanas seguidas', t: 'Practicaste 14 días seguidos.' },
 ];
 
 export const GAMES = [
@@ -89,6 +94,7 @@ export const GAMES = [
   { id: 'dictado', n: 'Dictado', e: '✏️', d: 'Escribe la palabra con letras.', minLevel: 3 },
   { id: 'traza', n: 'Traza la letra', e: '🖍️', d: 'Dibuja la letra con el dedo.', minLevel: 1 },
   { id: 'rima', n: 'Rimas', e: '🎵', d: '¿Cuál rima?', minLevel: 3 },
+  { id: 'mayus', n: 'Grande y pequeña', e: '🔡', d: 'Une la mayúscula con la minúscula.', minLevel: 3 },
   { id: 'memoria', n: 'Memoria', e: '🃏', d: 'Encuentra las parejas.', minLevel: 2 },
   { id: 'frase', n: 'Lee la frase', e: '💬', d: 'Lee y responde la pregunta.', minLevel: 4 },
   { id: 'carrera', n: 'Carrera de lectura', e: '🏁', d: 'Lee rápido y gana la carrera.', minLevel: 3 },

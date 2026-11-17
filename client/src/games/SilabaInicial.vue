@@ -1,6 +1,6 @@
 <template>
   <div class="task">
-    <div class="big-emoji">{{ word.e }}</div>
+    <div class="big-emoji"><Pic :w="word" /></div>
     <BigWord :word="word.w" />
     <OptionGrid :options="options" :cols="3" :ok-speak="`${spoken(answer)}. ${spoken(word.w)}. ¡Genial!`" @done="(r) => finish(r.firstTry)" />
   </div>
@@ -8,6 +8,7 @@
 
 <script setup>
 /* ¿Con qué sílaba empieza la palabra? */
+import Pic from '../components/Pic.vue';
 import OptionGrid from '../components/OptionGrid.vue';
 import BigWord from '../components/BigWord.vue';
 import { useGame } from '../lib/game.js';

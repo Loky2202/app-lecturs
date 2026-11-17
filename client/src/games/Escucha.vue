@@ -25,7 +25,7 @@ if (level >= 3) {
   if (hard.length >= 2) pool = hard;
 }
 const dis = takeDistinct(pool, 2, (w) => w.w, new Set([word.w]));
-const options = shuffle([word, ...dis]).map((c) => ({ label: c.w, kind: 'word', correct: c.w === word.w, hint: `${spoken(word.w)}. Empieza con ${spoken(strip(word.w)[0])}.` }));
+const options = shuffle([word, ...dis]).map((c) => ({ label: p.lower ? c.w.toLowerCase() : c.w, kind: 'word', correct: c.w === word.w, hint: `${spoken(word.w)}. Empieza con ${spoken(strip(word.w)[0])}.` }));
 
 const say = () => Voice.speak(spoken(word.w));
 setInstruction('Escucha y toca la palabra.', `Escucha y toca la palabra: ${spoken(word.w)}.`);

@@ -50,7 +50,7 @@ function down(e) { drawing = true; strokes++; draw.value.setPointerCapture?.(e.p
 function move(e) { if (!drawing) return; const p = pt(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }
 function up() { drawing = false; }
 function clear() { ctx.clearRect(0, 0, SIZE, SIZE); strokes = 0; }
-function sayIt() { Voice.speak(`La letra ${info.name}. ${info.tip || ''}`); }
+function sayIt() { Voice.speak(`La letra ${info.name}. ${info.tip || ''}`, { rec: `l:${letter}` }); }
 
 function coverage() {
   const g = guide.value.getContext('2d').getImageData(0, 0, SIZE, SIZE).data;
@@ -72,7 +72,7 @@ async function check() {
   if (ok) {
     good(`¡Muy bien! Trazaste la ${info.name}.`);
     await wait(1100);
-    finish(attempts === 1 && c.ratio >= 0.45);
+    finish(attempts === 1 && c.ratio >= 0.45, { great: attempts === 1 && c.ratio >= 0.8 });
   } else {
     showFeedback(c.drawn === 0 ? 'Dibuja sobre la letra.' : 'Cubre toda la letra.', true);
     Voice.speak(c.drawn === 0 ? 'Pasa el dedo por encima de la letra.' : 'Casi. Pasa el dedo por toda la letra gris.');

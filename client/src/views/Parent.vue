@@ -80,6 +80,7 @@
           <label class="setting"><span>Velocidad de la voz ({{ prog.settings.rate }})</span><input type="range" min="0.6" max="1.1" step="0.05" :value="prog.settings.rate" @change="set('rate', Number($event.target.value))"></label>
           <label class="setting"><span>Sonidos</span><input type="checkbox" :checked="prog.settings.sfx" @change="set('sfx', $event.target.checked)"></label>
           <label class="setting"><span>Pausa activa cada 2 actividades</span><input type="checkbox" :checked="prog.settings.breaks" @change="set('breaks', $event.target.checked)"></label>
+          <label class="setting"><span>Modo oscuro (tarde/noche)</span><input type="checkbox" :checked="prog.settings.darkMode" @change="set('darkMode', $event.target.checked)"></label>
           <label class="setting"><span>Desbloquear todas las lecciones y juegos</span><input type="checkbox" :checked="prog.settings.freePath" @change="set('freePath', $event.target.checked)"></label>
           <label class="setting"><span>Nombre</span><input type="text" :value="child.name" maxlength="20" @change="rename($event.target.value)"></label>
           <p v-if="voiceWarn" class="error">{{ voiceWarn }}</p>
@@ -89,6 +90,12 @@
           </div>
         </div>
       </template>
+
+      <div class="card">
+        <h3>Imágenes y voces</h3>
+        <p class="small muted">Cambia el icono de una palabra o carga una foto, y graba con tu voz las palabras, letras y sílabas. Si hay imagen o grabación se usa; si no, el icono y la voz del dispositivo.</p>
+        <router-link class="btn secondary" to="/medios">🖼️🎙️ Abrir imágenes y voces</router-link>
+      </div>
 
       <div class="card">
         <h3>Palabras personalizadas</h3>

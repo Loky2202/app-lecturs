@@ -17,6 +17,14 @@ async function request(method, path, body, parent = false, keepalive = false) {
   return data;
 }
 
+async function upload(path, blob) {
+  const res = await fetch(BASE + path, { method: 'PUT', headers: { 'Content-Type': blob.type, 'x-parent-token': parentToken }, body: blob });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.error || (res.status === 413 ? 'El archivo es demasiado grande.' : `Error ${res.status}`));
+  return data;
+}
+const mediaPath = (kind, key) => `/media/${kind}/${encodeURIComponent(key)}`;
+
 export const api = {
   setParentToken(t) { parentToken = t || ''; if (t) sessionStorage.setItem('parentToken', t); else sessionStorage.removeItem('parentToken'); },
   hasParentToken: () => !!parentToken,
@@ -36,4 +44,8 @@ export const api = {
   customWords: () => request('GET', '/words'),
   addWord: (w) => request('POST', '/words', w, true),
   deleteWord: (id) => request('DELETE', `/words/${id}`, undefined, true),
+  media: () => request('GET', '/media'),
+  putMedia: (kind, key, blob) => upload(mediaPath(kind, key), blob),
+  setIcon: (key, emoji) => request('PUT', mediaPath('icon', key), { emoji }, true),
+  deleteMedia: (kind, key) => request('DELETE', mediaPath(kind, key), undefined, true),
 };

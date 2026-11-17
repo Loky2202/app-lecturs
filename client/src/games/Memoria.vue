@@ -1,8 +1,8 @@
 <template>
   <div class="task">
-    <div class="memory" :class="`pairs-${pairs}`">
+    <div class="memory" :class="`pairs-${pairs}`" :style="{ '--mcolor': worldColor }">
       <button v-for="(c, i) in cards" :key="i" class="mcard" :class="[c.kind, c.state]" @click="flip(i)">
-        <span class="back">❓</span><span class="face">{{ c.kind === 'word' ? c.w.w : c.w.e }}</span>
+        <span class="back">❓</span><span class="face"><template v-if="c.kind === 'word'">{{ p.lower ? c.w.w.toLowerCase() : c.w.w }}</template><Pic v-else :w="c.w" /></span>
       </button>
     </div>
   </div>
@@ -13,6 +13,8 @@
 import { reactive } from 'vue';
 import { useGame } from '../lib/game.js';
 import { pickWords } from '../lib/content.js';
+import { worldById } from '../content/misc.js';
+import Pic from '../components/Pic.vue';
 import { Voice } from '../lib/voice.js';
 import { Sfx } from '../lib/sfx.js';
 import { shuffle, spoken, wait } from '../lib/utils.js';
@@ -21,6 +23,7 @@ import { showFeedback, praise } from '../lib/feedback.js';
 const props = defineProps({ params: { type: Object, default: () => ({}) } });
 const emit = defineEmits(['instruction', 'done']);
 const { level, world, setInstruction, finish } = useGame(props, emit);
+const worldColor = worldById(world || 'dinos').color;
 const p = props.params;
 const pairs = p.pairs || (level >= 4 ? 4 : 3);
 const seen = new Set();
@@ -49,7 +52,7 @@ async function flip(i) {
     if (matched === pairs) {
       showFeedback(praise());
       await wait(1100);
-      finish(misses <= pairs - 1);
+      finish(misses <= pairs - 1, { perfect: misses === 0 });
     }
   } else {
     misses++;

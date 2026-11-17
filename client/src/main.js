@@ -4,9 +4,11 @@ import App from './App.vue';
 import { router } from './router.js';
 import { Voice } from './lib/voice.js';
 import { useApp } from './stores/app.js';
+import { loadMedia } from './lib/media.js';
 import './styles.css';
 
 Voice.init();
+loadMedia();
 
 const pinia = createPinia();
 const app = createApp(App);
