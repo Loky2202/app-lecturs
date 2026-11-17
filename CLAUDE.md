@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Misión Lectura: a Spanish-language reading app for 6-year-olds, self-hosted on a home server (Docker/CasaOS) and used from a tablet on the local network. All UI text, code comments, commit messages and docs are in Spanish; keep that convention.
 
-**Hard constraint: no internet at runtime.** No CDNs, web fonts, or external services. Speech uses the browser's `speechSynthesis` (`client/src/lib/voice.js`), and images are emoji.
+**Hard constraint: no internet at runtime.** No CDNs, web fonts, or external services. Speech uses the browser's `speechSynthesis` (`client/src/lib/voice.js`), and pictures are emoji, or photos the parents upload for custom words, which are served from the app's own SQLite.
 
 ## Commands
 
